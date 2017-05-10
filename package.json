@@ -1,0 +1,26 @@
+{
+  "name": "dataq-api",
+  "version": "1.0.0",
+  "description": "api for dataQ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/esgonz/api-dataq.git"
+  },
+  "keywords": [
+    "nodejs",
+    "mongodb",
+    "javascript",
+    "api",
+    "rest"
+  ],
+  "author": "Esteban Gonzalez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/esgonz/api-dataq/issues"
+  },
+  "homepage": "https://github.com/esgonz/api-dataq#readme"
+}
