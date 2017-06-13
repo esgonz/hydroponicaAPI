@@ -1,0 +1,26 @@
+
+<div class="col-lg-8 col-lg-offset-2" ng-controller="newCtrl">
+          <div class="page-header">
+            <h2>Tabla Eventos</h2>
+            <a  class="btn btn-primary">Nuevo Evento</a>
+          </div>
+
+          <div class="well bs-component">
+              <form class="form-horizontal"  name="nuevoEvento">
+                
+
+                <fieldset>
+                  <form-field ng-repeat="(key, value) in eventoFields" record="eventoFields" field="{{key}}" live="false" required="true" ></form-field>
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default">Cancelar</button>
+                      <button class="btn btn-primary" ng-click="save()" type="">Agregar</button>
+                    
+                    </div>
+                  </div>
+                </fieldset>
+
+              </form>
+          </div>
+</div>

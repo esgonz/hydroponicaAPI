@@ -1,0 +1,18 @@
+[	
+	{
+		"value": "superuser",
+		"name": "Super Administrador"
+	},
+	{
+		"value": "admin",
+		"name": "Administrador"
+	},
+	{
+		"value": "editor",
+		"name": "Editor"
+	},
+	{
+		"value": "colaborator",
+		"name": "Colaborador"
+	}
+]

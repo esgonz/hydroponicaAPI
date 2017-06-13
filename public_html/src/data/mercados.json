@@ -1,0 +1,30 @@
+[	
+	{
+		"value": "all",
+		"name": "Todos"
+	},
+	{
+		"value": "pe",
+		"name": "Perú"
+	},
+	{
+		"value": "br",
+		"name": "Brasil"
+	},
+	{
+		"value": "mx",
+		"name": "Mexico"
+	},
+	{
+		"value": "cl",
+		"name": "Chile"
+	},
+	{
+		"value": "euro",
+		"name": "Europa"
+	},
+	{
+		"value": "asia",
+		"name": "Asia"
+	}
+]
