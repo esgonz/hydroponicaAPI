@@ -1,4 +1,4 @@
-angular.module('dataQServerApp')
+angular.module('dataqApp')
 	.value('FieldTypes', {
 		text: 		['Text', 'Should be text'],
 		email: 		['Email', 'Should be email'],
@@ -39,14 +39,14 @@ angular.module('dataQServerApp')
 		template: la plantilla html de la directiva
 		replace: remplazar el elemento html con la plantilla (true) ó insertar dentro del elemento html (false)
 		scope:  variables a utilizar en la directiva
-			Evento:referencia a objeto, = significa que es una referencia directa, cualquier cambio al obj se ve reflejada en todo el modulo
+			Event:referencia a objeto, = significa que es una referencia directa, cualquier cambio al obj se ve reflejada en todo el modulo
 			field , live, required : son solo referencias (solo lectura)
 		link: funcion constructora del elemento	, se le pasa el scope como objeto
 	 */
 	.directive('formField', function($timeout, FieldTypes, MonthsStrings){
 		return{
 			restrict:'EA',
-			templateUrl: 'views/form-field.html',
+			templateUrl: 'views/events/form-field.html',
 			replace: true,
 			scope: {
 
@@ -57,7 +57,7 @@ angular.module('dataQServerApp')
 				
 			},
 			link: function (scope, element, attr){
-				//escucho la funcion invalid del record(obj Evento)
+				//escucho la funcion invalid del record(obj Event)
 				//set field como dirty 
 				scope.$on('record:invalid', function(){
 					scope[scope.field].$setDirty();
@@ -67,40 +67,40 @@ angular.module('dataQServerApp')
 
 				scope.blurUpdate = function(){
 					console.log("blurUpdate");
-					console.log(scope.record.eventoObj[0]);
+					console.log(scope.record.eventObj[0]);
 					
-					if(scope.record.eventoObj[0].fechaInicio !="" && scope.record.eventoObj[0].fechaInicio !== undefined ){
+					if(scope.record.eventObj[0].initDate !="" && scope.record.eventObj[0].initDate !== undefined ){
 
-						var fechaBruta = new Date( scope.record.eventoObj[0].fechaInicio);
+						var fechaBruta = new Date( scope.record.eventObj[0].initDate);
 						var fechaLimpia = fechaBruta.toISOString().substring(0, 10);
 						
-						/*scope.record.eventoObj[0].fechaInicio =	fechaLimpia.substring(5,7) + "-" + 
+						/*scope.record.eventObj[0].initDate =	fechaLimpia.substring(5,7) + "-" + 
 															 	fechaLimpia.substring(8,11) + "-" +
 																fechaLimpia.substring(0,4);*/
-						scope.record.eventoObj[0].mes 	= 	MonthsStrings[fechaLimpia.substring(5,7)] + " " + fechaLimpia.substring(0,4);
+						scope.record.eventObj[0].month 	= 	MonthsStrings[fechaLimpia.substring(5,7)] + " " + fechaLimpia.substring(0,4);
 
 
 					}
 
-					/*if(scope.record.eventoObj[0].fechaTermino !="" && scope.record.eventoObj[0].fechaTermino !== undefined ){
+					/*if(scope.record.eventObj[0].endDate !="" && scope.record.eventObj[0].endDate !== undefined ){
 
-						var fechaBruta 	= new Date( scope.record.eventoObj[0].fechaTermino);
+						var fechaBruta 	= new Date( scope.record.eventObj[0].endDate);
 						var fechaLimpia = fechaBruta.toISOString().substring(0, 10);
 
-						scope.record.eventoObj[0].fechaTermino =	fechaLimpia.substring(5,7 ) + "-" + 
+						scope.record.eventObj[0].endDate =	fechaLimpia.substring(5,7 ) + "-" + 
 															 		fechaLimpia.substring(8,11) + "-" +
 																	fechaLimpia.substring(0,4);						
 					}*/
 
 
 
-					if(scope.record.eventoObj[0]["_id"] == ""|| scope.record.eventoObj[0]["_id"] === undefined){
-						console.log("evento no existe todavia..");
+					if(scope.record.eventObj[0]["_id"] == ""|| scope.record.eventObj[0]["_id"] === undefined){
+						console.log("event no existe todavia..");
 					}else{
 						if (scope.live !== 'false'){
-							//scope.record referencia hacia el objeto Evento (factory) y su funcion Update (put)
-							scope.record.eventoObj[0].$update({id : scope.record.eventoObj[0]["_id"]}, function(updateRecord){
-								scope.record.eventoObj[0] = updateRecord;
+							//scope.record referencia hacia el objeto Event (factory) y su funcion Update (put)
+							scope.record.eventObj[0].$update({id : scope.record.eventObj[0]["_id"]}, function(updateRecord){
+								scope.record.eventObj[0] = updateRecord;
 							});
 						}
 					}

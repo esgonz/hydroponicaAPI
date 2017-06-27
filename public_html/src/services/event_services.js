@@ -1,12 +1,12 @@
-angular.module('dataQServerApp')
-    .service('paisesService',function($http)
+angular.module('dataqApp')
+    .service('countryService',function($http)
     {    
        this.getData = function()
        {
            var defer = $.Deferred();
-           $http.get('/src/data/paises.json')
+           $http.get('/src/data/country.json')
            .then(function(response) {
-              //alert("paises GET OK");
+              //alert("country GET OK");
               //console.log(response);
               defer.resolve(response);
 
@@ -14,14 +14,14 @@ angular.module('dataQServerApp')
            return defer.promise();      
        }
     })
-    .service('mercadosService',function($http)
+    .service('marketsService',function($http)
     {    
        this.getData = function()
        {
            var defer = $.Deferred();
-           $http.get('/src/data/mercados.json')
+           $http.get('/src/data/markets.json')
            .then(function(response) {
-              //alert("paises GET OK");
+              //alert("country GET OK");
               //console.log(response);
               defer.resolve(response);
 
@@ -36,7 +36,7 @@ angular.module('dataQServerApp')
            var defer = $.Deferred();
            $http.get('/src/data/tipos.json')
            .then(function(response) {
-              //alert("paises GET OK");
+              //alert("country GET OK");
               //console.log(response);
               defer.resolve(response);
 

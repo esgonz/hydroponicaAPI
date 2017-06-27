@@ -1,11 +1,11 @@
 /**
- * Module dataQServerApp
+ * Module dataQServerLogin
  */
 console.log('initialize Angular app.js');
 
-angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalStorageModule'])
 
-    .controller('HomeCtrl', function($rootScope, $scope, $location, localStorageService, Main) {
+angular.module('dataqApp')
+    .controller('LoginCtrl', function($rootScope, $scope, $location, localStorageService, Login) {
 
         /*Verifi if token exists*/
         $rootScope.token = localStorageService.get('token');
@@ -14,7 +14,7 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalS
 
         if($rootScope.token != null){
             console.log("token exist");
-            window.location = "/me";
+            window.location = "/login/home";
         }
 
 
@@ -28,7 +28,7 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalS
 
         
             /* make a call to login signin */
-            $scope.loginPromise = Main.signin.try(formData);
+            $scope.loginPromise = Login.signin.try(formData);
             $scope.loginPromise.$promise.then(function (response) {
                 $scope.loginPromise    = response;
                 
@@ -37,19 +37,12 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalS
                     //obtain the token
                     var token = $scope.loginPromise.token;
                     if (token != null) {                        
-
-                        var storing = localStorageService.set('token', $scope.loginPromise.token);
+                        $scope.currentUser = Login.setToken(token);
+                        if ($scope.currentUser != null) {
+                            console.log("current user Ok");
+                            window.location = "/login/home";
+                        };
                         
-                        //if storage its ok,setting the current user, redirect to main page
-                        if (storing){
-                            alert("login ok!"); 
-                            $rootScope.currentUser = Main.currentUser()._doc;
-                            console.log("$rootScope.currentUser ");
-                            console.log($rootScope.currentUser);
-                            window.location = "/me";
-                        }else{
-                            console.log("error localStorage");
-                        }
                     }else{
                         console.log("error Token null");
                     }                      
@@ -60,9 +53,7 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalS
             });
         };
     })
-
-
-    .controller('MeCtrl', function($rootScope, $scope, $location, localStorageService, Main) {
+    .controller('HomeCtrl', function($rootScope, $scope, $location, localStorageService, Login) {
 
         $scope.token = localStorageService.get('token');
         console.log("$scope.token");
@@ -72,10 +63,15 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalS
             window.location = "/login";
         }
 
-        $scope.mePromise = Main.me.getData({'token': $scope.token});
+        $scope.currentUser = Login.getCurrentUser();
+                        if ($scope.currentUser != null) {
+                            console.log("current user Ok");
+                            console.log($scope.currentUser);
+                        };
+        /*$scope.mePromise = Login.me.getData({'token': $scope.token});
         $scope.mePromise.$promise.then(function (response) {
             //$scope.mePromise    = response;
             console.log( response);
-        });
+        });*/
     })
 

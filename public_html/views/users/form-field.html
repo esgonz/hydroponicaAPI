@@ -13,9 +13,9 @@
 			<!--ng-blur -> actualiza cuando el usuario blur de input (pierde el foco)-->
 			
 			<div class="" ng-switch-when="true">
-				<input ng-if="record[field][0] != 'select'"  ng-model ='record.eventoObj[0][field]' type="{{record[field][0]}}" class="form-control" required ng-change="update()" ng-blur="blurUpdate()" value="{{record.eventoObj[0][field]}}"/>
-				<span>field: {{record.eventoObj[0][field]}}</span>
-				<select ng-if="record[field][0] == 'select'" ng-model ='record.eventoObj[0][field]' type="select" class="form-control" required ng-change="update()" ng-blur="blurUpdate()">
+				<input ng-if="record[field][0] != 'select'"  ng-model ='record.eventObj[0][field]' type="{{record[field][0]}}" class="form-control" required ng-change="update()" ng-blur="blurUpdate()" value="{{record.eventObj[0][field]}}"/>
+				<span>field: {{record.eventObj[0][field]}}</span>
+				<select ng-if="record[field][0] == 'select'" ng-model ='record.eventObj[0][field]' type="select" class="form-control" required ng-change="update()" ng-blur="blurUpdate()">
 					
 					<option>Seleccionar..</option>
 
@@ -27,9 +27,9 @@
 			<!--switch default -->
 			<div class="" ng-switch-default>
 				
-				<input ng-if="record[field][0] != 'select'"  ng-model ='record.eventoObj[0][field]' type="{{record[field][0]}}" class="form-control" required ng-change="update()" ng-blur="blurUpdate()" value="{{record.eventoObj[0][field]}}"/>
-				<span>field: {{record.eventoObj[0][field]}}</span>
-				<select ng-if="record[field][0] == 'select'" ng-model ='record.eventoObj[0][field]' type="select" class="form-control" required ng-change="update()" ng-blur="blurUpdate()">
+				<input ng-if="record[field][0] != 'select'"  ng-model ='record.eventObj[0][field]' type="{{record[field][0]}}" class="form-control" required ng-change="update()" ng-blur="blurUpdate()" value="{{record.eventObj[0][field]}}"/>
+				<span>field: {{record.eventObj[0][field]}}</span>
+				<select ng-if="record[field][0] == 'select'" ng-model ='record.eventObj[0][field]' type="select" class="form-control" required ng-change="update()" ng-blur="blurUpdate()">
 					<option>Seleccionar..</option>
 					<option value="{{selectItem.value}}" ng-repeat="selectItem in record[field][2]" value="{{selectItem.value}}" ng-blur="blurUpdate()">{{selectItem.name}}</option>					
 				</select>

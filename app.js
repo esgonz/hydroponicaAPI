@@ -9,13 +9,13 @@ var express 		= require( "express" ),
 
 
 //connection to DB
-mongoose.connect( 'mongodb://localhost/eventos' );
+mongoose.connect( 'mongodb://localhost/events' );
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
-  console.log( "we're connected! eventos DB" );
+  console.log( "we're connected! events DB" );
 });
 
 //middlewares
@@ -36,26 +36,9 @@ app.use( function( req, res, next){
 
 
 //import models and controllers
-var	evento 			= require( "./models/evento"),
-	eventoCtrl 		= require( "./controllers/eventos" );
+var	event 			= require( "./models/event"),
+	eventCtrl 		= require( "./controllers/events" );
 
-
-//API routes 
-var eventos = express.Router();
-	//get all eventos
-	eventos.route('/eventos')
-		.get(eventoCtrl.findAllEvents)
-		.post(eventoCtrl.addEvento);
-	
-	eventos.route('/eventos/:id')
-		.get(eventoCtrl.findById)
-		.put( eventoCtrl.updateEvento)
-		.delete( eventoCtrl.deleteEvento);
-	eventos.route('/eventos/mercado/:mercado')
-		.get(eventoCtrl.findByMercado);
-
-
-app.use('/api', eventos);
 
 
 //import models and controllers
@@ -79,8 +62,14 @@ app.use('/api', auth);
 var users = express.Router();
 	//get all users
 	users.route('/users')
-		.get(userCtrl.findAllUsers)
-		.post(userCtrl.ensureAuthorized, userCtrl.signUp);
+		.get(
+			userCtrl.headerAuth, 
+			userCtrl.findAllUsers
+			)
+		.post(
+			userCtrl.headerAuth, 
+			userCtrl.addUser
+			);
 	
 	/*users.route('/users/:id')
 		.get(userCtrl.findById)
@@ -88,10 +77,52 @@ var users = express.Router();
 		.delete( userCtrl.deleteUser);*/
 
 	users.route('/users/me')
-		.post(userCtrl.tokenfy ,  eventoCtrl.findAllEvents);
+		.post(
+			userCtrl.headerAuth ,  
+			eventCtrl.findAllEvents
+			);
 	
 
 app.use('/api', users);
+
+
+//API routes 
+var events = express.Router();
+	//get all events
+	events.route('/events')
+		.get(	userCtrl.headerAuth , 
+				eventCtrl.findByMarket
+			)
+		.post(	userCtrl.headerAuth , 
+				eventCtrl.addEvent
+			);
+
+	
+	events.route('/events/:id')
+		.get(
+			userCtrl.headerAuth,
+			eventCtrl.findById
+			)
+		.put( 
+			userCtrl.headerAuth, 
+			eventCtrl.updateEvent
+			)
+		.delete(
+			userCtrl.headerAuth, 
+			eventCtrl.deleteEvent
+			);
+
+
+	events.route('/events/market/:market')
+		.get(
+			userCtrl.headerAuth, 
+			eventCtrl.findByMarket
+			);
+
+
+app.use('/api', events);
+
+
 
 //basic route
 /*
@@ -108,7 +139,7 @@ app
 		res.sendfile('public_html/main.html');
 	})
 /*
-mongoose.connect( 'mongodb://localhost/eventos',
+mongoose.connect( 'mongodb://localhost/events',
 	function( err, res){
 		if(err){
 			console.log( 'ERROR: connecting to Database. ' + err );

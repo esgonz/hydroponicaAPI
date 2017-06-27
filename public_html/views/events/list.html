@@ -1,7 +1,7 @@
-<div class="col-lg-12" ng-controller="listCtrl">
+<div class="col-lg-12" ng-controller="ListEventCtrl">
           <div class="page-header">
             <h2>Tabla Eventos</h2>
-            <a  class="btn btn-primary" href="/evento/nuevo/">Nuevo Evento</a>
+            <a  class="btn btn-primary" href="/event/nuevo/">Nuevo Evento</a>
           </div>
 
 
@@ -12,7 +12,7 @@
                 <tr>
 
                   <th>Nombre</th>
-                  <th>mes</th>
+                  <th>Mes</th>
                   <th>fecha Inicio</th>
                   <th>fecha Termino</th>
                   <th>Pais</th>
@@ -22,22 +22,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="evento in eventosToShow">
+                <tr ng-repeat="event in eventsToShow">
       
-                  <td>{{evento.nombre}}</td>
-                  <td>{{evento.mes}}</td>
-                  <td>{{evento.fechaInicio | date:'dd-MM-yyyy'}}</td>
-                  <td>{{evento.fechaTermino | date:'dd-MM-yyyy'}}</td>
-                  <td>{{evento.pais}}</td>
-                  <td>{{evento.mercado}}</td>
+                  <td>{{event.name}}</td>
+                  <td>{{event.month}}</td>
+                  <td>{{event.initDate | date:'dd-MM-yyyy'}}</td>
+                  <td>{{event.endDate | date:'dd-MM-yyyy'}}</td>
+                  <td>{{event.country}}</td>
+                  <td>{{event.market}}</td>
                   <td>
-                    <span ng-show="{{evento.disponible}}" class="glyphicon glyphicon-ok-circle success-color" aria-hidden="true"></span>
-                    <span ng-show="{{!evento.disponible}}" class="glyphicon glyphicon-remove-circle alert-color" aria-hidden="true"></span>                   
+                    <span ng-show="{{event.status}}" class="glyphicon glyphicon-ok-circle success-color" aria-hidden="true"></span>
+                    <span ng-show="{{!event.status}}" class="glyphicon glyphicon-remove-circle alert-color" aria-hidden="true"></span>                   
 
                   </td>
                   <td>
                   <div class="btn-group">
-                    <a class="btn btn-sm btn-primary" ng-click="show(evento._id)">
+                    <a class="btn btn-sm btn-primary" ng-click="show(event._id)">
                       <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                     </a>
 

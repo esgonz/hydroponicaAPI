@@ -1,8 +1,8 @@
 
 var mongoose 	= require( "mongoose" ),
 	jwt 		= require( "jsonwebtoken"),
-	User 		= mongoose.model( "User" );
-
+	User 		= mongoose.model( "User" ),
+	SALT 		= "^rM%Mj6okx?yGT|gJg9c.KKJMs/BGy^njuILKl~?[8RQ*r:bo$sNDMgpx*tZD|3";
 
 /*
 Module to auth an intent to login
@@ -46,7 +46,7 @@ exports.auth = function (req, res){
 /*
 Register new users
  */
-exports.signUp = function (req, res){
+exports.addUser = function (req, res){
 	User.findOne( { email: req.body.email }, function ( err, user){
 		if( err ){
 			res.json({
@@ -57,7 +57,7 @@ exports.signUp = function (req, res){
 			if( user ){
 				res.json({
 					type: false,
-					data: "User already login!"
+					data: "User already exists!"
 				});
 			}else{
 
@@ -78,7 +78,7 @@ exports.signUp = function (req, res){
 					type: 			req.body.type,
 					status: 		req.body.status
 				});
-				user.token = jwt.sign(userToken, "^rM%Mj6okx?yGT|gJg9c.KKJMs/BGy^njuILKl~?[8RQ*r:bo$sNDMgpx*tZD|3");	
+				user.token = jwt.sign(userToken, SALT);	
 				user.save( function( err, user1) {
 					if( err ){
 						return res.status(500).send( err.message );
@@ -135,7 +135,7 @@ exports.updateUser = function( req, res) {
 		user.email 			= req.body.email;
 		user.password 		= req.body.password;
 		user.token 			= req.body.token;
-		user.market 		= req.body.market;
+		user.market 		= req.body.market.toLowerCase();
 		user.type 			= req.body.type;
 		user.status 		= req.body.status;
 
@@ -198,27 +198,81 @@ exports.ensureAuthorized = function(req,res, next){
 
 
 //PUT update one event
-exports.tokenfy = function( req, res, next) {
+exports.postAuth = function( req, res, next) {
 	console.log( 'tokenfy GET');
 	//console.log(req.body.token);
 	
 	User.findOne({ token: req.body.token }, function (err, user) {
 	  	if( err ){
 	  		console.log( 'tokenfy Error');
-			res.json({
+			res.json([{
 				type: false,
 				data: "error Occured WITH TOKEN: " +err
-			});
+			}]);
 		}else{
 			if( user ){
 				console.log( 'tokenfy True');
 				next();
 			}else{
 				console.log( 'tokenfy false');
-				res.json({
+				res.json([{
 					type: false,
 					data: "User NOT LOGIN TOKEN!"
-				});
+				}]);
+			}	
+		}
+	  
+	});
+}
+
+
+exports.getUser = function (req, res, next){
+	User.findOne({ token: req.headers.token }, function (err, user) {
+		  	if( err ){
+		  		console.log( 'tokenfy Error');
+				res.json([{
+					type: false,
+					data: "error Occured WITH TOKEN: " +err
+				}]);
+			}else{
+				if( user ){
+					console.log( 'tokenfy True');
+					req.user = user;
+					next();
+				}else{
+					console.log( 'tokenfy false');
+					res.json([{
+						type: false,
+						data: "User NOT LOGIN TOKEN!"
+					}]);
+				}	
+			}		  
+	});
+}
+
+//PUT update one event
+exports.headerAuth = function( req, res, next) {
+	console.log( 'tokenfy GET');
+	//console.log(req.body.token);
+	
+	User.findOne({ token: req.headers.token }, function (err, user) {
+	  	if( err ){
+	  		console.log( 'tokenfyb HEADER Error');
+			res.json([{
+				type: false,
+				data: "error Occured WITH TOKEN: " +err
+			}]);
+		}else{
+			if( user ){
+				console.log( 'tokenfyb HEADER True');
+				req.user = user;
+				next();
+			}else{
+				console.log( 'tokenfyb false');
+				res.json([{
+					type: false,
+					data: "User NOT LOGIN TOKEN!"
+				}]);
 			}	
 		}
 	  

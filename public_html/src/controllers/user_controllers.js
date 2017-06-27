@@ -1,44 +1,17 @@
-/**
- * Module dataQServerApp
- */
-console.log('initialize Angular app.js');
-
-angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
-    .config( function( $routeProvider, $locationProvider){
-        //route config
-        $routeProvider
-            .when('/users/', {
-                templateUrl:    'views/users/list.html',
-                controller:     'listCtrl'
-            })
-
-            .when( '/users/nuevo', {
-                templateUrl:    'views/users/new.html',
-                controller:     'newCtrl'
-            })
-
-            .when( '/users/:id', {
-                templateUrl:    'views/users/single.html',
-                controller:     'singleCtrl'
-            })
-
-            .otherwise({
-                redirectTo:     '/users/'
-            })
-
-        $locationProvider
-            .html5Mode( true );
-    })
-
     /*
         ListCtrl list users from the database, using angular factory
      */
-    .controller( 'listCtrl', function( $scope, $rootScope, $location, User){
+angular.module('dataqApp')
+    .controller( 'ListUserCtrl', function( $scope, $rootScope, $location, User, Login){
 
-        console.log("listCtrl");
+        console.log("ListUserCtrl");
+        //verify login
+        $scope.login           = Login.verifySession();
+
+
+        var QTYPAGE = 15;
         $rootScope.PAGE         = "users";
-        //pagination vars
-        $scope.limitPagination  = [0, 10];
+        var limitPagination  = [0, QTYPAGE];
         $scope.incrementPagination = 1;
         $scope.totalPage = [];
         
@@ -51,7 +24,7 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
             $scope.userPromise    = response;
 
             //count the total users to use on pagination
-            var auxTotalPage        = Math.ceil($scope.userPromise.length /10);
+            var auxTotalPage        = Math.ceil($scope.userPromise.length /QTYPAGE);
             for (var i = 0; i < auxTotalPage; i++) {
                 $scope.totalPage.push(i);
             };
@@ -65,7 +38,7 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
         
 
         $scope.show     = function (id){
-            $location.url('/userPromise/'+ id);
+            $location.url('/users/'+ id);
         };
 
         $scope.pagination = function (increment){
@@ -85,8 +58,8 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
                 $scope.incrementPagination    = increment;                
             }
 
-                $scope.limitPagination[0]   = ($scope.incrementPagination * 10) -10;
-                $scope.limitPagination[1]   = $scope.incrementPagination * 10;
+                $scope.limitPagination[0]   = ($scope.incrementPagination * QTYPAGE) -QTYPAGE;
+                $scope.limitPagination[1]   = $scope.incrementPagination * QTYPAGE;
                 console.log("$scope.limitPagination");
                 console.log($scope.limitPagination);
                 $scope.usersToShow          = $scope.userPromise.slice($scope.limitPagination[0], $scope.limitPagination[1]);
@@ -102,7 +75,7 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
     /*
         Register a new user in the db using angular factory and connect via post express/nodejs
      */
-    .controller( 'newCtrl', function( $scope, $rootScope, $location, $http, User, tiposService, mercadosService){
+    .controller( 'NewUserCtrl', function( $scope, $rootScope, $location, $http, User, tiposService, marketsService){
 
         console.log("newCtrl");
         $rootScope.PAGE = "new";
@@ -141,12 +114,12 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
         });
 
         //find the market with the service
-        var mercados = [];
-        mercadosService.getData().then(function(result){
+        var markets = [];
+        marketsService.getData().then(function(result){
             for (var i = 0; i< result.data.length; i++) {               
-                mercados.push({"name": result.data[i].name , "value": result.data[i].value});
+                markets.push({"name": result.data[i].name , "value": result.data[i].value});
             };
-            $scope.userFields.mercado.push(mercados);
+            $scope.userFields.market.push(markets);
         });                  
 
 
@@ -174,50 +147,50 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
     })
     
     /*
-    .controller('singleCtrl', function($rootScope, $scope, $location , Evento, $routeParams, paisesService, mercadosService){
+    .controller('SingleUserCtrl', function($rootScope, $scope, $location , Event, $routeParams, paisesService, marketsService){
         $rootScope.PAGE = "single";
-        $scope.evento = new Evento(
+        $scope.event = new Event(
                                         {
                                             _id:            "", 
-                                            eventoId:       "",
+                                            eventId:       "",
                                             nombre:         "",
                                             clave:          "",
-                                            mes:            "",
-                                            fechaInicio:    "",
-                                            fechaTermino:   "",
-                                            pais:           "",
-                                            mercado:        "",
-                                            disponible:     ""
+                                            month:            "",
+                                            initDate:    "",
+                                            endDate:   "",
+                                            country:           "",
+                                            market:        "",
+                                            status:     ""
                                         });
 
-        $scope.eventoPromise   = Evento.get({id: $routeParams.id});
-        $scope.eventoPromise.$promise.then(function (response) {
-            $scope.eventoPromise = response;
+        $scope.eventPromise   = Event.get({id: $routeParams.id});
+        $scope.eventPromise.$promise.then(function (response) {
+            $scope.eventPromise = response;
 
 
-            $scope.evento._id          = $scope.eventoPromise._id;
-            $scope.evento.eventoId     = $scope.eventoPromise.eventoId;
-            $scope.evento.nombre       = $scope.eventoPromise.nombre;
-            $scope.evento.clave        = $scope.eventoPromise.clave;
-            $scope.evento.mes          = $scope.eventoPromise.mes;
-            $scope.evento.fechaInicio  = $scope.eventoPromise.fechaInicio;
-            $scope.evento.fechaTermino = $scope.eventoPromise.fechaTermino;
-            $scope.evento.pais         = $scope.eventoPromise.pais;
-            $scope.evento.mercado      = $scope.eventoPromise.mercado;
-            $scope.evento.disponible   = $scope.eventoPromise.disponible;
+            $scope.event._id          = $scope.eventPromise._id;
+            $scope.event.eventId     = $scope.eventPromise.eventId;
+            $scope.event.nombre       = $scope.eventPromise.nombre;
+            $scope.event.clave        = $scope.eventPromise.clave;
+            $scope.event.month          = $scope.eventPromise.month;
+            $scope.event.initDate  = $scope.eventPromise.initDate;
+            $scope.event.endDate = $scope.eventPromise.endDate;
+            $scope.event.country         = $scope.eventPromise.country;
+            $scope.event.market      = $scope.eventPromise.market;
+            $scope.event.status   = $scope.eventPromise.status;
 
-            $scope.eventoFields   =
+            $scope.eventFields   =
             {
-                eventoId:       ["text",        true ],
+                eventId:       ["text",        true ],
                 nombre:         ["text",        true ],
                 clave:          ["password",    true ],
-                mes:            ["text",        false ],
-                fechaInicio:    ["date",        true ],
-                fechaTermino:   ["date",        true ],
-                pais:           ["select",      true ],
-                mercado:        ["select",      true ],
-                disponible:     ["checkbox",    true ],
-                eventoObj:      [$scope.evento, false]
+                month:            ["text",        false ],
+                initDate:    ["date",        true ],
+                endDate:   ["date",        true ],
+                country:           ["select",      true ],
+                market:        ["select",      true ],
+                status:     ["checkbox",    true ],
+                eventObj:      [$scope.event, false]
             };
 
 
@@ -226,37 +199,31 @@ angular.module('dataQServerApp', ['ngRoute', 'ngResource', 'ngMessages'])
                 for (var i = 0; i< result.data.length; i++) {               
                     paises.push({"name": result.data[i].name , "value": result.data[i].value});
                 };
-                $scope.eventoFields.pais.push(paises);
+                $scope.eventFields.country.push(paises);
             });
 
-            var mercados = [];
-            mercadosService.getData().then(function(result){
+            var markets = [];
+            marketsService.getData().then(function(result){
                 for (var i = 0; i< result.data.length; i++) {               
-                    mercados.push({"name": result.data[i].name , "value": result.data[i].value});
+                    markets.push({"name": result.data[i].name , "value": result.data[i].value});
                 };
-                $scope.eventoFields.mercado.push(mercados);
+                $scope.eventFields.market.push(markets);
             }); 
 
-            console.log($scope.eventoFields.evento);
+            console.log($scope.eventFields.event);
         });//end then promise
 
 
         
         $scope.update   = function(){
-            $scope.evento.$update({id: $scope.evento._id});
-            $location.url('/eventos');
+            $scope.event.$update({id: $scope.event._id});
+            $location.url('/events');
 
         };
 
         $scope.delete   = function(){
-            $scope.evento.$delete({id: $scope.evento._id});
-            $location.url('/eventos');
+            $scope.event.$delete({id: $scope.event._id});
+            $location.url('/events');
 
         };
     })*/
-
-
-
-
-
-
