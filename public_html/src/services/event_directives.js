@@ -43,13 +43,14 @@ angular.module('dataqApp')
 			field , live, required : son solo referencias (solo lectura)
 		link: funcion constructora del elemento	, se le pasa el scope como objeto
 	 */
-	.directive('formField', function($timeout, FieldTypes, MonthsStrings){
+	.directive('formField', function($timeout, FieldTypes, MonthsStrings, camposServices ){
 		return{
 			restrict:'EA',
 			templateUrl: 'views/events/form-field.html',
 			replace: true,
 			scope: {
 
+				errors: 		'=',
 				record: 		'=',
 				field: 			'@',
 				live: 			'@',
@@ -64,11 +65,80 @@ angular.module('dataqApp')
 				});
 
 				scope.types = FieldTypes;
+				scope.eventsFieldsName = camposServices.getData();
+
+
 
 				scope.blurUpdate = function(){
 					console.log("blurUpdate");
 					console.log(scope.record.eventObj[0]);
 					
+					if(scope.record.eventObj[0].country == "-1" ||  scope.record.eventObj[0].country == undefined   )	
+					{
+						scope.errors["country"] = "Ingrese un Pais.";
+						console.log("error Country");
+					
+					}
+					else{
+						delete scope.errors.country;
+					}
+
+					if( scope.record.eventObj[0].market == "-1" ||  scope.record.eventObj[0].market == undefined   )	
+					{
+						scope.errors["market"] 	= "Ingrese un Mercado.";
+						console.log("error market");
+						
+					}
+					else{
+						delete scope.errors.market;
+					}
+
+					if( scope.record.eventObj[0].initDate == "" ||  scope.record.eventObj[0].initDate == undefined   )	
+					{
+						scope.errors["initDate"] 	= "Ingrese una Fecha de inicio.";
+						console.log("error initDate");
+					
+					}
+					else{
+						delete scope.errors.initDate;
+					}
+
+					if( scope.record.eventObj[0].endDate == "" ||  scope.record.eventObj[0].endDate == undefined   )	
+					{
+						scope.errors["endDate"] 	= "Ingrese una Fecha de Termino.";
+						console.log("error endDate");
+			
+					}
+					else{
+						delete scope.errors.endDate;
+					}
+
+					if( scope.record.eventObj[0].name == "" ||  scope.record.eventObj[0].name == undefined  )	
+					{
+						scope.errors["name"] 	= "Ingrese un Nombre.";
+						console.log("error name");
+
+					}
+					else{
+						delete scope.errors.name;
+					}
+
+					if( scope.record.eventObj[0].password == "" ||  scope.record.eventObj[0].password == undefined  )	
+					{
+						scope.errors["password"] 	= "Ingrese una clave.";
+						console.log("error password");
+
+					}
+					else{
+						delete scope.errors.password;
+					}
+
+
+					if (Object.keys(scope.errors).length >= 1) {
+						return;
+					};
+
+
 					if(scope.record.eventObj[0].initDate !="" && scope.record.eventObj[0].initDate !== undefined ){
 
 						var fechaBruta = new Date( scope.record.eventObj[0].initDate);
@@ -78,8 +148,6 @@ angular.module('dataqApp')
 															 	fechaLimpia.substring(8,11) + "-" +
 																fechaLimpia.substring(0,4);*/
 						scope.record.eventObj[0].month 	= 	MonthsStrings[fechaLimpia.substring(5,7)] + " " + fechaLimpia.substring(0,4);
-
-
 					}
 
 					/*if(scope.record.eventObj[0].endDate !="" && scope.record.eventObj[0].endDate !== undefined ){
@@ -111,7 +179,7 @@ angular.module('dataqApp')
 				var saveTimeout;
 				scope.update = function(){
 					$timeout.cancel(saveTimeout);
-					saveTimeout = $timeout(scope.blurUpdate, 1000);
+					saveTimeout = $timeout(scope.blurUpdate, 2600);
 				};
 			}
 		};

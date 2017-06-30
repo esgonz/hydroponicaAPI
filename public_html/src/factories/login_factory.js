@@ -37,6 +37,7 @@ angular.module('dataqApp')
         
         function logout(){
             localStorageService.remove(KEYNAME);
+            redirectLogin();
         }
 
         function setTokenLocalStorage(token){

@@ -21,7 +21,7 @@ angular.module('dataqApp')
                 console.log("poor promise");
                 var response = $scope.eventPromise[0];
                 if (response.type == false) {
-                    alert("Login problems!");
+                    console.log("Login problems!");
                     return;
                 };
                
@@ -38,7 +38,7 @@ angular.module('dataqApp')
         });
 
         $scope.show     = function (id){
-            $location.url('/event/'+ id);
+            $location.url('/events/'+ id);
         };
 
         $scope.pagination = function (increment){
@@ -68,25 +68,23 @@ angular.module('dataqApp')
 
         };
     })
-
-    .controller( 'NewEventCtrl', function( $scope, $rootScope, $location, $http, Event, countryService, marketsService, Login){
+    .controller( 'NewEventCtrl', function( $scope, $rootScope, $location, $http, Event, camposServices, countryService, marketsService, Login){
 
         console.log("newCtrl");
         $scope.login           = Login.verifySession();
 
         $rootScope.PAGE = "new";
-
-
+        $scope.errors = {};
         $scope.eventFields   =
             {
-                eventId:       ["text", true],
-                name:          ["text", true],
+                eventId:       ["text",     true],
+                name:          ["text",     true],
                 password:      ["password", true],
-                month:         ["text", false],
-                initDate:      ["date", true],
-                endDate:       ["date", true],
-                country:       ["select", true],
-                market:        ["select", true],
+                month:         ["text",     false],
+                initDate:      ["date",     true],
+                endDate:       ["date",     true],
+                country:       ["select",   true],
+                market:        ["select",   true],
                 status:        ["checkbox", true],
                 eventObj:      [
                                     new Event(
@@ -115,9 +113,24 @@ angular.module('dataqApp')
         });
 
         var markets = [];
+
+
         marketsService.getData().then(function(result){
+             var user = Login.getCurrentUser();
+             if (user == null || user === undefined ) {
+                return;
+             };
+
             for (var i = 0; i< result.data.length; i++) {
-                markets.push({"name": result.data[i].name , "value": result.data[i].value});
+                if (user.type == "superuser") {
+                    markets.push({"name": result.data[i].name , "value": result.data[i].value});
+                }else{
+                    if ( result.data[i].value.toLowerCase() == user.market.toLowerCase()){
+                        console.log("mercado objetivo encontrado");
+                        markets.push({"name": result.data[i].name , "value": result.data[i].value}); 
+                    }
+                }
+                
             };
             $scope.eventFields.market.push(markets);
         });
@@ -127,7 +140,10 @@ angular.module('dataqApp')
 
 
         $scope.save = function(){
-
+            if (Object.keys($scope.errors).length >= 1) {
+                console.log("Existe errores");
+                return;
+            };
 
             //validando "nuevoEvent"-> formulario
             if($scope.nuevoEvent.$invalid){
@@ -145,7 +161,6 @@ angular.module('dataqApp')
 
         }
     })
-
     .controller('SingleEventCtrl', function($rootScope, $scope, $location , Event, $routeParams, countryService, marketsService, Login){
         console.log('SingleEventCtrl')
         $scope.login           = Login.verifySession();
@@ -154,16 +169,17 @@ angular.module('dataqApp')
         $scope.event = new Event(
                                         {
                                             _id:        "",
-                                            eventId:       "",
-                                            name:         "",
-                                            password:          "",
-                                            month:            "",
-                                            initDate:    "",
-                                            endDate:   "",
-                                            country:           "",
-                                            market:        "",
+                                            eventId:    "",
+                                            name:       "",
+                                            password:   "",
+                                            month:      "",
+                                            initDate:   "",
+                                            endDate:    "",
+                                            country:    "",
+                                            market:     "",
                                             status:     ""
                                         });
+        $scope.errors = {};
 
         $scope.eventPromise   = Event.get({id: $routeParams.id});
         $scope.eventPromise.$promise.then(function (response) {
@@ -175,8 +191,8 @@ angular.module('dataqApp')
             $scope.event.name           = $scope.eventPromise.name;
             $scope.event.password       = $scope.eventPromise.password;
             $scope.event.month          = $scope.eventPromise.month;
-            $scope.event.initDate       = $scope.eventPromise.initDate;
-            $scope.event.endDate        = $scope.eventPromise.endDate;
+            $scope.event.initDate       = new Date($scope.eventPromise.initDate) ;
+            $scope.event.endDate        = new Date($scope.eventPromise.endDate);
             $scope.event.country        = $scope.eventPromise.country;
             $scope.event.market         = $scope.eventPromise.market;
             $scope.event.status         = $scope.eventPromise.status;
@@ -206,8 +222,22 @@ angular.module('dataqApp')
 
             var markets = [];
             marketsService.getData().then(function(result){
+
+                var user = Login.getCurrentUser();
+                 if (user == null || user === undefined ) {
+                    return;
+                 };
+
                 for (var i = 0; i< result.data.length; i++) {
-                    markets.push({"name": result.data[i].name , "value": result.data[i].value});
+                    if (user.type == "superuser") {
+                        markets.push({"name": result.data[i].name , "value": result.data[i].value});
+                    }else{
+                        if ( result.data[i].value.toLowerCase() == user.market.toLowerCase()){
+                            console.log("mercado objetivo encontrado");
+                            markets.push({"name": result.data[i].name , "value": result.data[i].value}); 
+                        }
+                    }
+                    
                 };
                 $scope.eventFields.market.push(markets);
             });
@@ -218,6 +248,11 @@ angular.module('dataqApp')
 
 
         $scope.update   = function(){
+            if (Object.keys($scope.errors).length >= 1) {
+                console.log("Existe errores");
+                return;
+            };
+
             $scope.event.$update({id: $scope.event._id});
             $location.url('/events');
 

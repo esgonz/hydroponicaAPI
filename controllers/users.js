@@ -2,13 +2,14 @@
 var mongoose 	= require( "mongoose" ),
 	jwt 		= require( "jsonwebtoken"),
 	User 		= mongoose.model( "User" ),
+	Sha1 		= require("sha1"),
 	SALT 		= "^rM%Mj6okx?yGT|gJg9c.KKJMs/BGy^njuILKl~?[8RQ*r:bo$sNDMgpx*tZD|3";
-
 /*
 Module to auth an intent to login
  */
 exports.auth = function (req, res){
-	User.findOne( { email: req.body.email , password: req.body.password }, function (err, user){
+	var passwordHashed = Sha1(req.body.password + SALT);
+	User.findOne( { email: req.body.email , password: passwordHashed.toUpperCase() }, function (err, user){
 		if(err){
 			res.json({
 				type: false,
@@ -60,12 +61,12 @@ exports.addUser = function (req, res){
 					data: "User already exists!"
 				});
 			}else{
-
+				var passwordHashed = Sha1(req.body.password+SALT);
 				var user = new User({
 					userId: 		req.body.userId,
 					name: 			req.body.name,
 					email: 			req.body.email,
-					password: 		req.body.password,
+					password: 		passwordHashed.toUpperCase(),
 					market: 		req.body.market,
 					type: 			req.body.type,
 					status: 		req.body.status
@@ -112,6 +113,22 @@ exports.findAllUsers = function (req, res){
 	});
 };
 
+
+//GET - Return all Users in the DB 
+exports.findAllUsersTablet = function (req, res){
+	User.find( function(err, users){
+		if (err) {
+			console.log( 'findAllEvents: error' ) 
+			res.send(500, err.message);
+		};
+
+		console.log( 'findAllEvents: GET /users' )
+		res.status(200).jsonp(users);
+	});
+};
+
+
+
 //GET - Return all Users in the DB with the id 
 exports.findById = function (req, res){
 	User.findById( req.params.id, function(err, user){
@@ -128,12 +145,12 @@ exports.findById = function (req, res){
 //PUT update one event
 exports.updateUser = function( req, res) {
 	console.log( 'updateUser PUT /users'+  req.params.id );
-
+	var passwordHashed = Sha1(req.body.password+SALT);
 	User.findById(req.params.id, function (err, user) {
 	  	user.userId 		= req.body.userId;
 		user.name 			= req.body.name;
-		user.email 			= req.body.email;
-		user.password 		= req.body.password;
+		user.email 			= req.body.email.toLowerCase();
+		user.password 		= passwordHashed.toUpperCase()
 		user.token 			= req.body.token;
 		user.market 		= req.body.market.toLowerCase();
 		user.type 			= req.body.type;

@@ -1,0 +1,26 @@
+
+<div class="col-lg-8 col-lg-offset-2" ng-controller="SingleEventCtrl">
+          <div class="page-header">
+            <h2>Tabla Events</h2>
+            <a  class="btn btn-danger" ng-click="delete()">Eliminar Event</a>
+          </div>
+
+          <div class="well bs-component">
+              <form class="form-horizontal"  name="editEvent">
+                
+
+                <fieldset>
+                  <form-field ng-repeat="(key, value) in eventFields" record="eventFields" field="{{key}}" live="true" required="true" ></form-field>
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default">Cancelar</button>
+                      <button class="btn btn-primary" ng-click="update()" type="">Actualizar</button>
+                    
+                    </div>
+                  </div>
+                </fieldset>
+
+              </form>
+          </div>
+</div>

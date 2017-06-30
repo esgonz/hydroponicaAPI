@@ -14,7 +14,7 @@ angular.module('dataqApp')
 
         if($rootScope.token != null){
             console.log("token exist");
-            window.location = "/login/home";
+            window.location = "/events";
         }
 
 

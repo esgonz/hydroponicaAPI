@@ -1,6 +1,6 @@
 angular.module('dataqApp')
     .factory('Event',  function($resource, Login){
-        function dynamicHeaderVal(requestConfig){
+        function tokenHeaderVal(requestConfig){
 
              return Login.getToken();
             // this function will be called every time the "get" action gets called
@@ -12,27 +12,27 @@ angular.module('dataqApp')
             'insert':   { 
                 method: 'POST', 
                 isArray: false,
-                headers: { 'token': dynamicHeaderVal }
+                headers: { 'token': tokenHeaderVal }
             },
             'delete':   {    
                 method: 'DELETE', 
                 isArray: false,
-                headers: { 'token': dynamicHeaderVal }
+                headers: { 'token': tokenHeaderVal }
             },
             'getAll':     {     
                 method: 'GET', 
                 isArray: true,
-                headers: { 'token': dynamicHeaderVal }
+                headers: { 'token': tokenHeaderVal }
             },
             'get':     {     
                 method: 'GET', 
                 isArray: false,
-                headers: { 'token': dynamicHeaderVal }
+                headers: { 'token': tokenHeaderVal }
             },
             'update':     {     
                 method: 'PUT', 
                 isArray: false,
-                headers: { 'token': dynamicHeaderVal }
+                headers: { 'token': tokenHeaderVal }
             },
 
         });

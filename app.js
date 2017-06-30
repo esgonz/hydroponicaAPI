@@ -4,18 +4,20 @@ var express 		= require( "express" ),
 	methodOverride	= require( "method-override" ),
 	mongoose		= require( "mongoose" ),
 	jwt 			= require("jsonwebtoken"),
-	morgan 			= require("morgan");
+	morgan 			= require("morgan"),
+	sha1 			= require("sha1"),
+	dbName 			= "dataq0100";
 
 
 
 //connection to DB
-mongoose.connect( 'mongodb://localhost/events' );
+mongoose.connect( 'mongodb://localhost/'+ dbName );
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
-  console.log( "we're connected! events DB" );
+  console.log( "we're connected! "+ dbName +" DB" );
 });
 
 //middlewares
@@ -33,7 +35,8 @@ app.use( function( req, res, next){
 })
 
 
-
+var setting 			= require("./models/setting.js"),
+	settingCtrl 		= require("./controllers/settings");
 
 //import models and controllers
 var	event 			= require( "./models/event"),
@@ -47,6 +50,16 @@ var	user 			= require( "./models/user"),
 
 
 
+var setting = express.Router();
+	//get all users
+	setting.route('/settings')
+		.get(settingCtrl.findAllSetting)
+		.post(settingCtrl.addSetting);
+
+	setting.route('/tablet/users')
+		.post(settingCtrl.validateTokenTablet, userCtrl.findAllUsers);
+
+app.use('/api', setting);
 
 
 var auth = express.Router();
@@ -63,7 +76,7 @@ var users = express.Router();
 	//get all users
 	users.route('/users')
 		.get(
-			userCtrl.headerAuth, 
+			
 			userCtrl.findAllUsers
 			)
 		.post(

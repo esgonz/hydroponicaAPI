@@ -1,16 +1,58 @@
 
 <div class="col-lg-8 col-lg-offset-2" ng-controller="SingleEventCtrl">
           <div class="page-header">
-            <h2>Tabla Events</h2>
-            <a  class="btn btn-danger" ng-click="delete()">Eliminar Event</a>
+            <a  class="btn btn-danger" ng-click="delete()">Eliminar Evento</a>
           </div>
 
           <div class="well bs-component">
+              
+              <div ng-if="errors.name != null " class="alert alert-dismissible alert-warning">
+               
+                <p>
+                {{errors.name}}
+                </p>
+              </div>
+              <div ng-if="errors.password != null " class="alert alert-dismissible alert-warning">
+                
+                <p>
+                {{errors.password}}
+                </p>
+              </div>
+              <div ng-if="errors.country != null " class="alert alert-dismissible alert-warning">
+                
+                <p>
+                {{errors.country}}
+                </p>
+              </div>
+              <div ng-if="errors.market != null " class="alert alert-dismissible alert-warning">
+                
+                <p>
+                {{errors.market}}
+                </p>
+              </div>
+
+               <div ng-if="errors.initDate != null " class="alert alert-dismissible alert-warning">
+                
+                <p>
+                {{errors.initDate}}
+                </p>
+              </div>
+
+               <div ng-if="errors.endDate != null " class="alert alert-dismissible alert-warning">
+                
+                <p>
+                {{errors.endDate}}
+                </p>
+              </div>
+ 
+
+              
+              
               <form class="form-horizontal"  name="editEvent">
                 
 
                 <fieldset>
-                  <form-field ng-repeat="(key, value) in eventFields" record="eventFields" field="{{key}}" live="true" required="true" ></form-field>
+                  <form-field ng-repeat="(key, value) in eventFields" errors="errors" record="eventFields" field="{{key}}" live="false" required="true" ></form-field>
 
                   <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">

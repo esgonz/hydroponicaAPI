@@ -54,6 +54,23 @@ angular.module('dataqApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalStorage
             .setDefaultToCookie(false);
     })
 
+    .run('', function(Login){
+        /*Verifi if token exists*/
+        $rootScope.token = localStorageService.get('token');
+        console.log("$rootScope.token");
+        console.log($rootScope.token);
+
+        if($rootScope.token != null){
+            console.log("token exist");
+            window.location = "/login/home";
+            $scope.user =  Login.getCurrentUser();
+            console.log("user");
+            console.log($scope.user);
+        }
+
+
+    })
+
 
 
 

@@ -44,3 +44,20 @@ angular.module('dataqApp')
            return defer.promise();      
        }
     })
+    .service('camposServices', function(){
+      this.getData = function(){
+        return {
+          eventId:    "ID",
+          name:       "Nombre",
+          password:   "Clave",
+          month:      "Mes",
+          initDate:   "Fecha de inicio",
+          endDate:    "Fecha de termino",
+          country:    "Pais",
+          market:     "Mercado",
+          status:     "Estado"
+        };
+      }
+      
+
+    })
