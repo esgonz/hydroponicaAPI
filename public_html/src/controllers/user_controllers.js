@@ -9,7 +9,7 @@ angular.module('dataqApp')
         $scope.login           = Login.verifySession();
 
 
-        var QTYPAGE = 15;
+        var QTYPAGE = 7;
         $rootScope.PAGE         = "users";
         var limitPagination  = [0, QTYPAGE];
         $scope.incrementPagination = 1;

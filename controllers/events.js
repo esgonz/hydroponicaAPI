@@ -4,9 +4,9 @@ var mongoose 	= require( "mongoose" ),
 //GET - Return all Events in the DB 
 exports.findAllEvents = function (req, res, next){
 	console.log( 'findAllEvents: GET /events' )
-	console.log(req.headers);
-	console.log("req.user:");
-	console.log(req.user);
+	//console.log(req.headers);
+	//console.log("req.user:");
+	//console.log(req.user);
 	Event.find( function(err, events){
 		if (err) { 
 			res.send(500, err.message);
@@ -36,20 +36,21 @@ exports.findByMarket = function (req, res){
 	console.log( 'findByMarket: GET /events MARKET' )
 
 
-	console.log("req.user:");
-	console.log(req.user);
+	//3console.log("req.user:");
+	//console.log(req.user);
 	// find each person with a last name matching 'Ghost'
-	//var query = null;
+	
+	var query = null;
 
-	//if (req.user.market =="all") {
-	//	query = Event.find();
-	//}else{
-	var	query = Event.find({ 'market':  req.user.market.toLowerCase() });
-	//}
+	if (req.user.market =="all") {
+		query = Event.find();
+	}else{
+		query = Event.find({ 'market':  req.user.market.toLowerCase() });
+	}
 	console.log("req.user.market");
 	console.log(req.user.market);
-	console.log("query");
-	console.log(query);
+	//console.log("query");
+	//console.log(query);
 	// selecting the `name` and `occupation` fields
 	//query.select('name country');
 

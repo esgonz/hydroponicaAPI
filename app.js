@@ -17,7 +17,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
-  console.log( "we're connected! "+ dbName +" DB" );
+  console.log( "we're connected!: "+ dbName +" DB" );
 });
 
 //middlewares
@@ -75,19 +75,30 @@ app.use('/api', auth);
 var users = express.Router();
 	//get all users
 	users.route('/users')
-		.get(
-			
+		/*.get(
+			userCtrl.headerAuth, 
 			userCtrl.findAllUsers
 			)
+		
 		.post(
 			userCtrl.headerAuth, 
 			userCtrl.addUser
 			);
+*/
+		.get(
+			userCtrl.findAllUsers
+			)
+		
+		.post(
+			userCtrl.addUser
+			);
 	
-	/*users.route('/users/:id')
+
+	
+	users.route('/users/:id')
 		.get(userCtrl.findById)
 		.put( userCtrl.updateUser)
-		.delete( userCtrl.deleteUser);*/
+		.delete( userCtrl.deleteUser);
 
 	users.route('/users/me')
 		.post(
@@ -103,7 +114,7 @@ app.use('/api', users);
 var events = express.Router();
 	//get all events
 	events.route('/events')
-		.get(	userCtrl.headerAuth , 
+		.get(	userCtrl.headerAuth ,
 				eventCtrl.findByMarket
 			)
 		.post(	userCtrl.headerAuth , 
@@ -134,6 +145,23 @@ var events = express.Router();
 
 
 app.use('/api', events);
+
+//API routes 
+var eventsMovil = express.Router();
+	//get all events
+	eventsMovil.route('/events')
+		.post(	userCtrl.postAuth , 
+				eventCtrl.findAllEvents
+			);
+
+	eventsMovil.route('/events/market/:market')
+		.post(
+			userCtrl.postAuth, 
+			eventCtrl.findByMarket
+			);
+
+
+app.use('/api/movil', eventsMovil);
 
 
 

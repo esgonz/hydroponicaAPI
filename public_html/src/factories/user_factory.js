@@ -26,6 +26,11 @@ angular.module('dataqApp')
             },
             'get':     {     
                 method: 'GET', 
+                isArray: false,
+                headers: { 'token': dynamicHeaderVal }
+            },
+            'getAll':     {     
+                method: 'GET', 
                 isArray: true,
                 headers: { 'token': dynamicHeaderVal }
             }

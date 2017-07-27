@@ -8,6 +8,9 @@ var mongoose 	= require( "mongoose" ),
 Module to auth an intent to login
  */
 exports.auth = function (req, res){
+
+
+
 	var passwordHashed = Sha1(req.body.password + SALT);
 	User.findOne( { email: req.body.email , password: passwordHashed.toUpperCase() }, function (err, user){
 		if(err){
@@ -216,22 +219,24 @@ exports.ensureAuthorized = function(req,res, next){
 
 //PUT update one event
 exports.postAuth = function( req, res, next) {
-	console.log( 'tokenfy GET');
-	//console.log(req.body.token);
-	
+	console.log( 'postAuth POST');
+	console.log( 'token');
+	console.log(req.body.token);
+	console.log(req.body);
 	User.findOne({ token: req.body.token }, function (err, user) {
 	  	if( err ){
-	  		console.log( 'tokenfy Error');
+	  		console.log( 'postAuth HEADER Error');
 			res.json([{
 				type: false,
 				data: "error Occured WITH TOKEN: " +err
 			}]);
 		}else{
 			if( user ){
-				console.log( 'tokenfy True');
+				console.log( 'postAuth HEADER True');
+				req.user = user;
 				next();
 			}else{
-				console.log( 'tokenfy false');
+				console.log( 'postAuth false');
 				res.json([{
 					type: false,
 					data: "User NOT LOGIN TOKEN!"
@@ -246,18 +251,18 @@ exports.postAuth = function( req, res, next) {
 exports.getUser = function (req, res, next){
 	User.findOne({ token: req.headers.token }, function (err, user) {
 		  	if( err ){
-		  		console.log( 'tokenfy Error');
+		  		console.log( 'getUser Error');
 				res.json([{
 					type: false,
 					data: "error Occured WITH TOKEN: " +err
 				}]);
 			}else{
 				if( user ){
-					console.log( 'tokenfy True');
+					console.log( 'getUser True');
 					req.user = user;
 					next();
 				}else{
-					console.log( 'tokenfy false');
+					console.log( 'getUser false');
 					res.json([{
 						type: false,
 						data: "User NOT LOGIN TOKEN!"
@@ -269,23 +274,21 @@ exports.getUser = function (req, res, next){
 
 //PUT update one event
 exports.headerAuth = function( req, res, next) {
-	console.log( 'tokenfy GET');
-	//console.log(req.body.token);
-	
+	console.log( 'headerAuth GET');
 	User.findOne({ token: req.headers.token }, function (err, user) {
 	  	if( err ){
-	  		console.log( 'tokenfyb HEADER Error');
+	  		console.log( 'headerAuth HEADER Error');
 			res.json([{
 				type: false,
-				data: "error Occured WITH TOKEN: " +err
+				data: "error Occured WITH TOKEN: " + err
 			}]);
 		}else{
 			if( user ){
-				console.log( 'tokenfyb HEADER True');
+				console.log( 'headerAuth HEADER True');
 				req.user = user;
 				next();
 			}else{
-				console.log( 'tokenfyb false');
+				console.log( 'headerAuth false');
 				res.json([{
 					type: false,
 					data: "User NOT LOGIN TOKEN!"

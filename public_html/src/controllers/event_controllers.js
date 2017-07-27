@@ -183,8 +183,7 @@ angular.module('dataqApp')
 
         $scope.eventPromise   = Event.get({id: $routeParams.id});
         $scope.eventPromise.$promise.then(function (response) {
-            $scope.eventPromise = response;
-
+        $scope.eventPromise = response;
 
             $scope.event._id            = $scope.eventPromise._id;
             $scope.event.eventId        = $scope.eventPromise.eventId;
@@ -199,7 +198,7 @@ angular.module('dataqApp')
 
             $scope.eventFields   =
             {
-                eventId:      ["text",        true ],
+                eventId:      ["text",        false ],
                 name:         ["text",        true ],
                 password:     ["password",    true ],
                 month:        ["text",        false ],
