@@ -18,7 +18,7 @@
 </head>
   <body class="">
     <!--navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" ng-controller="navMenuCtrl" id="top">
+    <div class="navbar navbar-default navbar-fixed-top" ng-controller="navMenuCtrl" >
       <div class="container">
         <div class="navbar-header">
           <a href="../" class="navbar-brand"><img class="logo" src="ic_data_q.png" alt=""></a>
@@ -82,7 +82,8 @@
         <div class="row">
           <div class="container" ng-view></div>
         </div>
-      </div> 
+      </div>
+      <a class="pull-right" href="#top">Volver Arriba</a> 
     </div>
     <!--/cuerpo -->
   
@@ -90,10 +91,10 @@
   <footer>
     <div class="container">
         <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-10">
 
             <ul class="list-unstyled">
-              <li class="pull-right"><a href="#top">Volver Arriba</a></li>
+              
               <li><a target="blank" href="http://sqm.com" >SQM</a></li>
               <li><a target="blank" href="http://sqm.com/mx/home.aspx">SQM México</a></li>
               <li><a target="blank" href="http://www.sqm-vitas.com/">SQM Vitas Peru</a></li>
@@ -102,6 +103,12 @@
             <p>Realizado por <a href="#"> Marketing SQM</a>. contactar a <a href="mailto:esteban.gonzalez@sqm.com">esteban.gonzalez@sqm.com</a>.</p>
            
           </div>
+          <div class="col-lg-2">
+          <center>
+            <img class="img-responsive footer-logo" src="/logo.png" alt="">
+            </center>
+          </div>
+
         </div>
     </div>
   </footer>
@@ -117,24 +124,19 @@
     <script src="bower_components/angular-messages/angular-messages.min.js" type="text/javascript" ></script>
     
     
-
-<!--
-    <script src="src/login/module.js" type="text/javascript" ></script>
-    <script src="src/login/controllers.js" type="text/javascript" ></script>
-    <script src="src/login/services.js" type="text/javascript" ></script>-->
-   
-   
+    
     <script src="src/modules/module.js" type="text/javascript" ></script> 
     
     <script src="src/controllers/menu_controllers.js" type="text/javascript" ></script>
     <script src="src/controllers/event_controllers.js" type="text/javascript" ></script>
     <script src="src/controllers/user_controllers.js" type="text/javascript" ></script>    
     <script src="src/controllers/login_controllers.js" type="text/javascript" ></script>
-  
+    <script src="src/controllers/home_controllers.js" type="text/javascript" ></script>
+
     <script src="src/factories/event_factory.js" type="text/javascript" ></script>
     <script src="src/factories/user_factory.js" type="text/javascript" ></script>    
     <script src="src/factories/login_factory.js" type="text/javascript" ></script>
-
+    
     <script src="src/services/event_directives.js" type="text/javascript" ></script>
     <script src="src/services/event_services.js" type="text/javascript" ></script> 
 </body></html>

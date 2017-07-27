@@ -17,7 +17,7 @@ angular.module('dataqApp')
             window.location = "/events";
         }
 
-
+        $scope.error = "";
         $scope.signin = function() {
             var formData = {
                 email: $scope.email,
@@ -40,7 +40,7 @@ angular.module('dataqApp')
                         $scope.currentUser = Login.setToken(token);
                         if ($scope.currentUser != null) {
                             console.log("current user Ok");
-                            window.location = "/login/home";
+                            window.location = "/home";
                         };
                         
                     }else{
@@ -48,30 +48,10 @@ angular.module('dataqApp')
                     }                      
                 }else{
                     console.log("error signin, fals:" + $scope.loginPromise.data);
-                    alert($scope.loginPromise.data);
+                    $scope.error = $scope.loginPromise.data;
                 }                
             });
         };
     })
-    .controller('HomeCtrl', function($rootScope, $scope, $location, localStorageService, Login) {
 
-        $scope.token = localStorageService.get('token');
-        console.log("$scope.token");
-        console.log($scope.token);
-
-        if($scope.token == null){
-            window.location = "/login";
-        }
-
-        $scope.currentUser = Login.getCurrentUser();
-                        if ($scope.currentUser != null) {
-                            console.log("current user Ok");
-                            console.log($scope.currentUser);
-                        };
-        /*$scope.mePromise = Login.me.getData({'token': $scope.token});
-        $scope.mePromise.$promise.then(function (response) {
-            //$scope.mePromise    = response;
-            console.log( response);
-        });*/
-    })
 

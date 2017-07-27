@@ -1,4 +1,5 @@
 var mongoose 	= require( "mongoose" ),
+	uuidv1 		= require("uuid/v1"), 
 	Event 		= mongoose.model( "Event" );
 
 //GET - Return all Events in the DB 
@@ -91,7 +92,7 @@ exports.findByCountry = function (req, res){
 exports.addEvent = function (req, res){
 	console.log( 'addEvent POST /events' );
 	var event = new Event({
-		eventId: 	req.body.eventId,
+		eventId: 	uuidv1(),
 		name: 		req.body.name,
 		password: 	req.body.password,
 		month: 		req.body.month,
@@ -120,8 +121,7 @@ exports.updateEvent = function( req, res) {
 
 	Event.findById(req.params.id, function (err, event) {
 
-	  	event.eventId 	= req.body.eventId;
-		event.name 		= req.body.name;
+	  	event.name 		= req.body.name;
 		event.password 	= req.body.password;
 		event.month 	= req.body.month;
 		event.initDate 	= req.body.initDate;

@@ -73,7 +73,9 @@ angular.module('dataqApp')
 					console.log("blurUpdate");
 					console.log(scope.record.eventObj[0]);
 					
-					if(scope.record.eventObj[0].country == "-1" ||  scope.record.eventObj[0].country == undefined   )	
+					if(scope.record.eventObj[0].country == "-1" ||  
+						scope.record.eventObj[0].country == undefined ||  
+						scope.record.eventObj[0].country == ''  )	
 					{
 						scope.errors["country"] = "Ingrese un Pais.";
 						console.log("error Country");
@@ -83,7 +85,9 @@ angular.module('dataqApp')
 						delete scope.errors.country;
 					}
 
-					if( scope.record.eventObj[0].market == "-1" ||  scope.record.eventObj[0].market == undefined   )	
+					if( scope.record.eventObj[0].market == "-1" ||  
+						scope.record.eventObj[0].market == undefined ||  
+						scope.record.eventObj[0].market == '')	
 					{
 						scope.errors["market"] 	= "Ingrese un Mercado.";
 						console.log("error market");

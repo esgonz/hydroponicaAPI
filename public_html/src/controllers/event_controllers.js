@@ -71,13 +71,13 @@ angular.module('dataqApp')
     .controller( 'NewEventCtrl', function( $scope, $rootScope, $location, $http, Event, camposServices, countryService, marketsService, Login){
 
         console.log("newCtrl");
-        $scope.login           = Login.verifySession();
+        $scope.login        = Login.verifySession();
 
-        $rootScope.PAGE = "new";
-        $scope.errors = {};
-        $scope.eventFields   =
+        $rootScope.PAGE     = "new";
+        $scope.errors       = {};
+        $scope.eventFields  =
             {
-                eventId:       ["text",     true],
+                eventId:       ["number",   false],
                 name:          ["text",     true],
                 password:      ["password", true],
                 month:         ["text",     false],
@@ -198,7 +198,7 @@ angular.module('dataqApp')
 
             $scope.eventFields   =
             {
-                eventId:      ["text",        false ],
+                eventId:      ["number",        false ],
                 name:         ["text",        true ],
                 password:     ["password",    true ],
                 month:        ["text",        false ],

@@ -11,7 +11,7 @@ angular.module('dataqApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalStorage
                 templateUrl:    'views/login/signin.html',
                 controller:     'LoginCtrl'
             })
-            .when('/login/home', {
+            .when('/home', {
                 templateUrl:    'views/login/home.html',
                 controller:     'HomeCtrl'
             })
@@ -44,6 +44,9 @@ angular.module('dataqApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalStorage
                 templateUrl:    'views/events/single.html',
                 controller:     'SingleEventCtrl'
             })
+            .otherwise({
+                redirectTo: '/home'
+            });
 
         $locationProvider 
             .html5Mode( true );
@@ -62,7 +65,7 @@ angular.module('dataqApp', ['ngRoute', 'ngResource', 'ngMessages', 'LocalStorage
 
         if($rootScope.token != null){
             console.log("token exist");
-            window.location = "/login/home";
+            window.location = "/home";
             $scope.user =  Login.getCurrentUser();
             console.log("user");
             console.log($scope.user);

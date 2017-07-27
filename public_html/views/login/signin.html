@@ -1,10 +1,19 @@
 <div class="row" data-ng-controller="LoginCtrl">
     <div class="col-lg-12">
+    <a name="top"></a>
     <div class="panel panel-primary">
             <div class="panel-heading">
-                <strong>Signin</strong>
+                <strong>Iniciar Sesión</strong>
             </div>
             <div class="panel-body">
+
+
+        <div ng-if="error != '' " class="alert alert-dismissible alert-danger">
+          
+
+          <p>{{error}}</p>
+        </div>
+
                 <form class="form-horizontal" role="form" ng-submit="signin()">
                     <div class="form-group">
                         <label for="email" class="col-sm-2 control-label">Email</label>

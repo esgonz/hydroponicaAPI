@@ -45,7 +45,7 @@ angular.module('dataqApp')
                         
                         //if storage its ok,setting the current user, redirect to main page
                         if (storing){
-                            alert("login ok!"); 
+                            console.log("Usuario stored DB");
                             currentUser = getUserFromToken();
                             console.log(currentUser);
                             return currentUser;

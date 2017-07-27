@@ -1133,6 +1133,10 @@ footer {
 footer a{
     color: #7ac143 !important;
 }
+.footer-logo{
+  max-height: 100px;
+  display: inline-block;
+}
 .img-responsive,
 .thumbnail > img,
 .thumbnail a > img,
@@ -3076,8 +3080,8 @@ fieldset[disabled] a.btn {
 }
 .btn-default {
   color: #ffffff;
-  background-color: #95a5a6;
-  border-color: #95a5a6;
+  background-color: #2a2c3c;
+  border-color: #2a2c3c;
 }
 .btn-default:focus,
 .btn-default.focus {
@@ -3124,11 +3128,11 @@ fieldset[disabled] .btn-default:focus,
 .btn-default.disabled.focus,
 .btn-default[disabled].focus,
 fieldset[disabled] .btn-default.focus {
-  background-color: #95a5a6;
-  border-color: #95a5a6;
+  background-color: #2a2c3c;
+  border-color: #2a2c3c;
 }
 .btn-default .badge {
-  color: #95a5a6;
+  color: #2a2c3c;
   background-color: #ffffff;
 }
 .btn-primary {
@@ -4729,7 +4733,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   color: #cccccc;
 }
 .breadcrumb > .active {
-  color: #95a5a6;
+  color: #2a2c3c;
 }
 .pagination {
   display: inline-block;
@@ -4891,7 +4895,7 @@ a.label:focus {
   top: -1px;
 }
 .label-default {
-  background-color: #95a5a6;
+  background-color: #2a2c3c;
 }
 .label-default[href]:hover,
 .label-default[href]:focus {
