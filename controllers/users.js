@@ -2,7 +2,8 @@
 var mongoose 	= require( "mongoose" ),
 	jwt 		= require( "jsonwebtoken"),
 	User 		= mongoose.model( "User" ),
-	Sha1 		= require("sha1"),
+	Sha1 		= require("sha1"),	
+	uuidv1 		= require("uuid/v1"), 
 	SALT 		= "^rM%Mj6okx?yGT|gJg9c.KKJMs/BGy^njuILKl~?[8RQ*r:bo$sNDMgpx*tZD|3";
 /*
 Module to auth an intent to login
@@ -47,6 +48,10 @@ exports.auth = function (req, res){
 	});
 };
 
+
+
+
+
 /*
 Register new users
  */
@@ -65,8 +70,9 @@ exports.addUser = function (req, res){
 				});
 			}else{
 				var passwordHashed = Sha1(req.body.password+SALT);
+				var userUuid = uuidv1();
 				var user = new User({
-					userId: 		req.body.userId,
+					userId: 		userUuid,
 					name: 			req.body.name,
 					email: 			req.body.email,
 					password: 		passwordHashed.toUpperCase(),
@@ -75,7 +81,7 @@ exports.addUser = function (req, res){
 					status: 		req.body.status
 				});
 				var userToken = new User({
-					userId: 		req.body.userId,
+					userId: 		userUuid,
 					name: 			req.body.name,
 					email: 			req.body.email,
 					market: 		req.body.market,
@@ -107,25 +113,60 @@ exports.addUser = function (req, res){
 exports.findAllUsers = function (req, res){
 	User.find( function(err, users){
 		if (err) {
-			console.log( 'findAllEvents: error' ) 
+			console.log( 'findAllUsers: error' ) 
 			res.send(500, err.message);
 		};
 
-		console.log( 'findAllEvents: GET /users' )
+		console.log( 'findAllUsers: GET /users' )
 		res.status(200).jsonp(users);
 	});
 };
 
 
+//GET - Return all Userss in the DB with the id 
+exports.findByMarket = function (req, res){
+	console.log( 'findByMarket: GET /users MARKET' )
+
+
+	//3console.log("req.user:");
+	//console.log(req.user);
+	// find each person with a last name matching 'Ghost'
+	
+	var query = null;
+
+	if (req.user.market =="all") {
+		query = User.find();
+	}else{
+		query = User.find({ 'market':  req.user.market.toLowerCase() });
+	}
+	console.log("req.user.market");
+	console.log(req.user.market);
+	//console.log("query");
+	//console.log(query);
+	// selecting the `name` and `occupation` fields
+	//query.select('name country');
+
+	// execute the query at a later time
+	query.exec(function (err, users) {
+	  if (err) {
+	  	console.log("err QUERY");
+	  	return handleError(err);
+	  }
+	  //console.log('%s %s', event.name, event.market); // Space Ghost is a talk show host.
+	  console.log(users.length);
+	  res.status(200).jsonp(users);
+	})
+};
+
 //GET - Return all Users in the DB 
 exports.findAllUsersTablet = function (req, res){
 	User.find( function(err, users){
 		if (err) {
-			console.log( 'findAllEvents: error' ) 
+			console.log( 'findAllUsersTablet: error' ) 
 			res.send(500, err.message);
 		};
 
-		console.log( 'findAllEvents: GET /users' )
+		console.log( 'findAllUsersTablet: GET /users' )
 		res.status(200).jsonp(users);
 	});
 };
@@ -145,18 +186,25 @@ exports.findById = function (req, res){
 };
 
 
-//PUT update one event
+//PUT update one user
 exports.updateUser = function( req, res) {
 	console.log( 'updateUser PUT /users'+  req.params.id );
-	var passwordHashed = Sha1(req.body.password+SALT);
+	var passwordHashed = "";
+	if (req.body.password != "") {
+		console.log("req.body.password Empty" );
+		var passwordHashed = Sha1(req.body.password+ SALT);
+	};
+	
 	User.findById(req.params.id, function (err, user) {
-	  	user.userId 		= req.body.userId;
 		user.name 			= req.body.name;
 		user.email 			= req.body.email.toLowerCase();
-		user.password 		= passwordHashed.toUpperCase()
+		if (passwordHashed != "") {
+			console.log("passwordHashed Empty" );
+			user.password 	= passwordHashed.toUpperCase();
+		};		
 		user.token 			= req.body.token;
 		user.market 		= req.body.market.toLowerCase();
-		user.type 			= req.body.type;
+		user.type 			= req.body.type.toLowerCase();
 		user.status 		= req.body.status;
 
 		user.save( function( err, user) {
@@ -172,7 +220,7 @@ exports.updateUser = function( req, res) {
 	});
 }
 
-//DELETE delete one event
+//DELETE delete one user
 exports.deleteUser = function ( req, res ){
 	User.findById( req.params.id, function ( err, user){
 		user.remove(function(err){
@@ -272,7 +320,7 @@ exports.getUser = function (req, res, next){
 	});
 }
 
-//PUT update one event
+//headerAuth
 exports.headerAuth = function( req, res, next) {
 	console.log( 'headerAuth GET');
 	User.findOne({ token: req.headers.token }, function (err, user) {

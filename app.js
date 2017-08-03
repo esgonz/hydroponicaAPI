@@ -14,13 +14,13 @@ var express 		= require( "express" ),
 mongoose.connect( 'mongodb://localhost/'+ dbName );
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // we're connected!
-  console.log( "we're connected!: "+ dbName +" DB" );
-});
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function() {
+	  // we're connected!
+	  console.log( "we're connected!: "+ dbName +" DB" );
+	});
 
-//middlewares
+//Middlewares
 app
 	.use(bodyParser.urlencoded( { extended: true } ))
 	.use(bodyParser.json())
@@ -35,21 +35,22 @@ app.use( function( req, res, next){
 })
 
 
+
 var setting 			= require("./models/setting.js"),
 	settingCtrl 		= require("./controllers/settings");
 
-//import models and controllers
+//import models and controllers Events
 var	event 			= require( "./models/event"),
 	eventCtrl 		= require( "./controllers/events" );
 
 
 
-//import models and controllers
+//import models and controllers Users
 var	user 			= require( "./models/user"),
 	userCtrl 		= require( "./controllers/users" );
 
 
-
+//URis API Settings
 var setting = express.Router();
 	//get all users
 	setting.route('/settings')
@@ -62,6 +63,7 @@ var setting = express.Router();
 app.use('/api', setting);
 
 
+//URis API auths
 var auth = express.Router();
 	//get all users
 	auth.route('/auth')
@@ -71,46 +73,48 @@ var auth = express.Router();
 app.use('/api', auth);
 
 
-//API routes 
+//URis API users 
 var users = express.Router();
 	//get all users
 	users.route('/users')
-		/*.get(
-			userCtrl.headerAuth, 
-			userCtrl.findAllUsers
-			)
-		
-		.post(
-			userCtrl.headerAuth, 
-			userCtrl.addUser
-			);
-*/
 		.get(
-			userCtrl.findAllUsers
+			userCtrl.headerAuth, 
+			userCtrl.findByMarket
+			)
+		
+		.post(
+			userCtrl.headerAuth, 
+			userCtrl.addUser
+			);
+
+		/*.get(
+			userCtrl.findByMarket
 			)
 		
 		.post(
 			userCtrl.addUser
-			);
+			);*/
 	
 
 	
 	users.route('/users/:id')
-		.get(userCtrl.findById)
-		.put( userCtrl.updateUser)
-		.delete( userCtrl.deleteUser);
+		.get(
+			userCtrl.headerAuth,
+			userCtrl.findById
+			)
+		.put(
+			userCtrl.headerAuth,
+			userCtrl.updateUser)
+		.delete(
+			userCtrl.headerAuth,
+			userCtrl.deleteUser);
 
-	users.route('/users/me')
-		.post(
-			userCtrl.headerAuth ,  
-			eventCtrl.findAllEvents
-			);
-	
+
 
 app.use('/api', users);
 
 
-//API routes 
+//URis API events 
 var events = express.Router();
 	//get all events
 	events.route('/events')
@@ -146,7 +150,7 @@ var events = express.Router();
 
 app.use('/api', events);
 
-//API routes 
+//URis API movils 
 var eventsMovil = express.Router();
 	//get all events
 	eventsMovil.route('/events')
@@ -179,22 +183,6 @@ app
 	.get('*', function (req, res){
 		res.sendfile('public_html/main.html');
 	})
-/*
-mongoose.connect( 'mongodb://localhost/events',
-	function( err, res){
-		if(err){
-			console.log( 'ERROR: connecting to Database. ' + err );
-		}else{
-			console.log( 'conected to Database. ');
-		}
-		app.use(router)
-		.listen( 3000, function(){
-			console.log( "Node server running on http://localhost:3000" );
-		} );
-	});
-*/
-
-
 // start server
 
 		app.listen( 3000, function(){

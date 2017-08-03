@@ -9,30 +9,38 @@ angular.module('dataqApp')
         $scope.login           = Login.verifySession();
 
 
-        var QTYPAGE = 7;
+        var QTYPAGE = 15;
         $rootScope.PAGE         = "users";
         var limitPagination  = [0, QTYPAGE];
-        $scope.incrementPagination = 1;
-        $scope.totalPage = [];
+        var incrementPagination = 1;
+        var totalPage = [];
         
         //user from DB
-        $scope.userPromise    = User.query();
+        $scope.userPromise    = User.getAll();
         
         $scope.userPromise.$promise.then(function (response) {
             
             //when the factory return the data, userPromise its ok
-            $scope.userPromise    = response;
+           $scope.userPromise    = response;
 
-            //count the total users to use on pagination
-            var auxTotalPage        = Math.ceil($scope.userPromise.length /QTYPAGE);
-            for (var i = 0; i < auxTotalPage; i++) {
-                $scope.totalPage.push(i);
+            //if exists something wrong with the login
+            if ($scope.userPromise.length <= 1 ) {
+                console.log("poor promise");
+                var response = $scope.userPromise[0];
+                if (response.type == false) {
+                    console.log("Login problems!");
+                    return;
+                };
+               
             };
-            console.log("$scope.totalPage");
-            console.log($scope.totalPage);
 
-            //crop the list of user in function of the pagination
-            $scope.usersToShow    = $scope.userPromise.slice($scope.limitPagination[0], $scope.limitPagination[1]);        
+            var auxTotalPage        = Math.ceil($scope.userPromise.length / QTYPAGE);
+            for (var i = 0; i < auxTotalPage; i++) {
+                totalPage.push(i);
+            };
+            console.log("totalPage");
+            console.log(totalPage);
+            $scope.usersToShow    = $scope.userPromise.slice(limitPagination[0], limitPagination[1]);
             console.log($scope.usersToShow);
         });    
         
@@ -75,155 +83,212 @@ angular.module('dataqApp')
     /*
         Register a new user in the db using angular factory and connect via post express/nodejs
      */
-    .controller( 'NewUserCtrl', function( $scope, $rootScope, $location, $http, User, tiposService, marketsService){
+    .controller( 'NewUserCtrl', function( $scope, $rootScope, $location, $http, User, 
+        camposUserServices, tiposService, marketsService, Login){
 
         console.log("newCtrl");
-        $rootScope.PAGE = "new";
+        $scope.login        = Login.verifySession();
 
+        $rootScope.PAGE     = "new";
+        $scope.errors       = {};
         $scope.userFields   =
             {
-                userId:         ["text", true],
-                name:           ["text", true],
-                email:          ["email", true],
-                password:       ["password", false],
-                market:         ["text", true],
-                type:           ["text", true],
-                status:         ["checkbox", true],
-                userObj:      [   
+                userId:         ["text",        false],
+                name:           ["text",        true],
+                email:          ["email",       true],
+                password:       ["password",    true],
+                market:         ["select",      true],
+                type:           ["select",      true],
+                status:         ["checkbox",    true],                
+                userObj:       [
                                     new User(
                                         {
                                             userId:     "",
-                                            nombnamere: "",
+                                            name:       "",
                                             email:      "",
                                             password:   "",
                                             market:     "",
                                             type:       "",
-                                            status:     ""
-                                        }), 
+                                            status:     ""                                            
+                                        }),
                                     false
                                 ]
             };
 
-        //find the tipos with the service
-        var tipos = [];
+
+        var type = [];
+
         tiposService.getData().then(function(result){
-            for (var i = 0; i< result.data.length; i++) {               
-                tipos.push({"name": result.data[i].name , "value": result.data[i].value});
+            var userLogin = Login.getCurrentUser();
+            /*for (var i = 0; i< result.data.length; i++) {
+                type.push({"name": result.data[i].name , "value": result.data[i].value});
+            };*/
+            //$scope.userFields.type.push(type);
+            
+            for (var i = 0; i< result.data.length; i++) {
+                if (userLogin.type == "superuser") {
+                    type.push({"name": result.data[i].name , "value": result.data[i].value});
+                }
+                else if (userLogin.type != "superuser") {
+
+                    if( result.data[i].value !="superuser" ){
+                        console.log("mercado objetivo encontrado");
+                        type.push({"name": result.data[i].name , "value": result.data[i].value});
+                    }
+                    
+                }                  
+  
+
+
+                
             };
-            $scope.userFields.tipo.push(tipos);
+            $scope.userFields.type.push(type);
+
+
         });
 
-        //find the market with the service
         var markets = [];
+
+
         marketsService.getData().then(function(result){
-            for (var i = 0; i< result.data.length; i++) {               
-                markets.push({"name": result.data[i].name , "value": result.data[i].value});
+             var userLogin = Login.getCurrentUser();
+             if (userLogin == null || userLogin === undefined ) {
+                return;
+             };
+
+            for (var i = 0; i< result.data.length; i++) {
+                if (userLogin.type == "superuser") {
+                    markets.push({"name": result.data[i].name , "value": result.data[i].value});
+                }else{
+                    if ( result.data[i].value.toLowerCase() == userLogin.market.toLowerCase()){
+                        console.log("mercado objetivo encontrado");
+                        markets.push({"name": result.data[i].name , "value": result.data[i].value}); 
+                    }
+                }
+                
             };
             $scope.userFields.market.push(markets);
-        });                  
+        });
 
 
 
-        
+
 
         $scope.save = function(){
+            if (Object.keys($scope.errors).length >= 1) {
+                console.log("Existe errores");
+                return;
+            };
 
-
-            //validando "nuevoUsuario"-> formulario
-            if($scope.nuevoUsuario.$invalid){
+            //validando "newUser"-> formulario
+            if($scope.newUser.$invalid){
                 console.log("invalid save user from ctrl");
                 console.log($scope.userFields.userObj[0]);
                 //broadcast usando angular Message
                 //$scope.broadcast('record:invalid');
             }else{
-                console.log("save user from ctrl ok");
+                console.log("save event from ctrl ok");
                 console.log($scope.userFields.userObj[0]);
 
-                $scope.userFields.userObj[0].$insert();
+                $scope.userFields.userObj[0].$insert({'token': $scope.login.token});
                 $location.url("/users");
             }
 
-        }            
+        }
     })
     
-    /*
-    .controller('SingleUserCtrl', function($rootScope, $scope, $location , Event, $routeParams, paisesService, marketsService){
-        $rootScope.PAGE = "single";
-        $scope.event = new Event(
-                                        {
-                                            _id:            "", 
-                                            eventId:       "",
-                                            nombre:         "",
-                                            clave:          "",
-                                            month:            "",
-                                            initDate:    "",
-                                            endDate:   "",
-                                            country:           "",
-                                            market:        "",
-                                            status:     ""
-                                        });
+    
+    .controller('SingleUserCtrl', function($rootScope, $scope, $location , User, $routeParams, marketsService, tiposService, Login){
+        console.log('SingleUserCtrl')
+        $scope.login        = Login.verifySession();
+        $rootScope.PAGE     = "single User";
+        $scope.user         =  new User(
+                            {
+                                userId:     "",
+                                name:       "",
+                                email:      "",
+                                password:   "",
+                                market:     "",
+                                type:       "",
+                                status:     ""    
+                            }
+                        );
+        $scope.errors           = {};
+        $scope.userPromise      = User.get({id: $routeParams.id});
+        $scope.userPromise.$promise.then(function (response) {
+            $scope.userPromise          = response;
+            $scope.user._id             = $scope.userPromise._id;
+            $scope.user.userId          = $scope.userPromise.userId;
+            $scope.user.name            = $scope.userPromise.name;
+            $scope.user.email           = $scope.userPromise.email;
+            $scope.user.password        = "";
+            $scope.user.market          = $scope.userPromise.market;
+            $scope.user.type            = $scope.userPromise.type;
+            $scope.user.status          = $scope.userPromise.status;
 
-        $scope.eventPromise   = Event.get({id: $routeParams.id});
-        $scope.eventPromise.$promise.then(function (response) {
-            $scope.eventPromise = response;
-
-
-            $scope.event._id          = $scope.eventPromise._id;
-            $scope.event.eventId     = $scope.eventPromise.eventId;
-            $scope.event.nombre       = $scope.eventPromise.nombre;
-            $scope.event.clave        = $scope.eventPromise.clave;
-            $scope.event.month          = $scope.eventPromise.month;
-            $scope.event.initDate  = $scope.eventPromise.initDate;
-            $scope.event.endDate = $scope.eventPromise.endDate;
-            $scope.event.country         = $scope.eventPromise.country;
-            $scope.event.market      = $scope.eventPromise.market;
-            $scope.event.status   = $scope.eventPromise.status;
-
-            $scope.eventFields   =
+            $scope.userFields   =
             {
-                eventId:       ["text",        true ],
-                nombre:         ["text",        true ],
-                clave:          ["password",    true ],
-                month:            ["text",        false ],
-                initDate:    ["date",        true ],
-                endDate:   ["date",        true ],
-                country:           ["select",      true ],
-                market:        ["select",      true ],
+                userId:     ["text",        false ],
+                name:       ["text",        true ],
+                email:      ["email",       true ],
+                password:   ["password",    true ],
+                market:     ["select",      true ],
+                type:       ["select",      true ],
                 status:     ["checkbox",    true ],
-                eventObj:      [$scope.event, false]
+                userObj:    [$scope.user, false]
+               
             };
 
 
-            var paises = [];
-            paisesService.getData().then(function(result){
-                for (var i = 0; i< result.data.length; i++) {               
-                    paises.push({"name": result.data[i].name , "value": result.data[i].value});
+            var type = [];
+            tiposService.getData().then(function(result){
+                for (var i = 0; i< result.data.length; i++) {
+                    type.push({"name": result.data[i].name , "value": result.data[i].value});
                 };
-                $scope.eventFields.country.push(paises);
+                $scope.userFields.type.push(type);
             });
 
             var markets = [];
             marketsService.getData().then(function(result){
-                for (var i = 0; i< result.data.length; i++) {               
-                    markets.push({"name": result.data[i].name , "value": result.data[i].value});
-                };
-                $scope.eventFields.market.push(markets);
-            }); 
 
-            console.log($scope.eventFields.event);
+                var userLogin = Login.getCurrentUser();
+                 if (userLogin == null || userLogin === undefined ) {
+                    return;
+                 };
+
+                for (var i = 0; i< result.data.length; i++) {
+                    if (userLogin.type == "superuser") {
+                        markets.push({"name": result.data[i].name , "value": result.data[i].value});
+                    }else{
+                        if ( result.data[i].value.toLowerCase() == userLogin.market.toLowerCase()){
+                            console.log("mercado objetivo encontrado");
+                            markets.push({"name": result.data[i].name , "value": result.data[i].value}); 
+                        }
+                    }
+                    
+                };
+                $scope.userFields.market.push(markets);
+            });
+
+            console.log($scope.userFields.event);
         });//end then promise
 
 
-        
+
         $scope.update   = function(){
-            $scope.event.$update({id: $scope.event._id});
-            $location.url('/events');
+            if (Object.keys($scope.errors).length >= 1) {
+                console.log("Existe errores");
+                return;
+            };
+
+            $scope.user.$update({id: $scope.user._id});
+            $location.url('/users');
 
         };
 
         $scope.delete   = function(){
-            $scope.event.$delete({id: $scope.event._id});
-            $location.url('/events');
+            $scope.user.$delete({id: $scope.user._id});
+            $location.url('/users');
 
         };
-    })*/
+    })

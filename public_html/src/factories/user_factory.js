@@ -1,5 +1,5 @@
 angular.module('dataqApp')
-    .factory('User',  function($resource){
+    .factory('User',  function($resource, Login){
         function dynamicHeaderVal(requestConfig){
              return Login.getToken();
             // this function will be called every time the "get" action gets called

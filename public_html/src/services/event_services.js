@@ -57,7 +57,18 @@ angular.module('dataqApp')
           market:     "Mercado",
           status:     "Estado"
         };
-      }
-      
-
+      }    
+    })
+    .service('camposUserServices', function(){
+      this.getData = function(){
+        return {
+          userId:     "ID",
+          name:       "Nombre",
+          email:      "Email",
+          password:   "Clave",
+          market:     "Mercado",
+          type:       "Tipo",
+          status:     "Estado"   
+        };
+      }     
     })
