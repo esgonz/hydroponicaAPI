@@ -41,7 +41,7 @@
 
           </ul>
 
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav" ng-if="userLogin.type =='superadmin' || userLogin.type =='admin'">
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Usuarios <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="themes">
@@ -56,7 +56,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">
-                 Hola {{user.name}}
+                 Hola {{userLogin.name}}
                  <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="themes">
@@ -83,7 +83,7 @@
           <div class="container" ng-view></div>
         </div>
       </div>
-      <a class="pull-right" href="#top">Volver Arriba</a> 
+      <!--<a class="pull-right" href="#top">Volver Arriba</a> -->
     </div>
     <!--/cuerpo -->
   

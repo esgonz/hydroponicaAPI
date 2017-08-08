@@ -69,7 +69,7 @@ exports.addUser = function (req, res){
 					data: "User already exists!"
 				});
 			}else{
-				var passwordHashed = Sha1(req.body.password+SALT);
+				var passwordHashed = Sha1(req.body.password + SALT);
 				var userUuid = uuidv1();
 				var user = new User({
 					userId: 		userUuid,
@@ -189,19 +189,15 @@ exports.findById = function (req, res){
 //PUT update one user
 exports.updateUser = function( req, res) {
 	console.log( 'updateUser PUT /users'+  req.params.id );
-	var passwordHashed = "";
-	if (req.body.password != "") {
-		console.log("req.body.password Empty" );
-		var passwordHashed = Sha1(req.body.password+ SALT);
-	};
-	
-	User.findById(req.params.id, function (err, user) {
+	/*User.findById(req.params.id, function (err, user) {
 		user.name 			= req.body.name;
 		user.email 			= req.body.email.toLowerCase();
+		
 		if (passwordHashed != "") {
-			console.log("passwordHashed Empty" );
+			console.log("passwordHashed no Empty" );
 			user.password 	= passwordHashed.toUpperCase();
-		};		
+		};
+
 		user.token 			= req.body.token;
 		user.market 		= req.body.market.toLowerCase();
 		user.type 			= req.body.type.toLowerCase();
@@ -212,11 +208,73 @@ exports.updateUser = function( req, res) {
 				return res.status(500).send( err.message );
 
 			}else{
-				res.status(200).jsonp(user);
+				console.log ("UPDATE USER:");
+				console.log (user);
+				//res.status(200).jsonp(user);
+				res.json({
+					type: 	true,
+					data: 	user,
+					token: 	user.token
+				});	
 			}
 
 		});
-	  
+	});*/
+
+	User.findById( req.params.id, function ( err, user){
+		if( err ){
+			res.json({
+				type: false,
+				data: "error Occured: " + err
+			});
+		}else{
+			if( user ){
+				var passwordHashed = "";
+					user.name 	=	req.body.name;
+					user.email 	=	req.body.email;
+					user.market =	req.body.market;
+					user.type 	=	req.body.type;
+					user.status =	req.body.status;
+			
+				if (req.body.password != "") {
+					console.log("req.body.password no Empty" );
+					passwordHashed 	= Sha1(req.body.password + SALT);
+					user.password 	= passwordHashed.toUpperCase();
+				};
+
+				var userToken = new User({
+					userId: 		user.id ,
+					name: 			user.name ,
+					email: 			user.email,
+					market: 		user.market,
+					type: 			user.type,
+					status: 		user.status
+				});
+				user.token = jwt.sign(userToken, SALT);	
+				user.save( function( err, userResponse) {
+					if( err ){
+						return res.status(500).send( err.message );
+
+					}else{
+						console.log(userResponse);
+						res.json({
+							type: 	true,
+							data: 	userResponse,
+							token: 	userResponse.token
+						});	
+						//res.status(200).jsonp(user);
+					}
+
+				});
+			
+				
+			}else{
+				res.json({
+					type: false,
+					data: "User doesnt exits"
+				});
+			}
+		}
 	});
 }
 
@@ -225,11 +283,9 @@ exports.deleteUser = function ( req, res ){
 	User.findById( req.params.id, function ( err, user){
 		user.remove(function(err){
 			if(err) return res.status(500).send(err.message);
-
 		res.status(200).send();
 
 		});
-
 	});
 };
 
@@ -342,7 +398,6 @@ exports.headerAuth = function( req, res, next) {
 					data: "User NOT LOGIN TOKEN!"
 				}]);
 			}	
-		}
-	  
+		}	  
 	});
 }

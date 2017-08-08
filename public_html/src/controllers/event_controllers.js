@@ -4,6 +4,7 @@ angular.module('dataqApp')
         console.log("listCtrl");
         //verify login
         $scope.login           = Login.verifySession();
+        $scope.userLogin    = Login.getCurrentUser();
 
         //page vars
         var QTYPAGE = 15;
@@ -11,6 +12,8 @@ angular.module('dataqApp')
         var limitPagination  = [0, QTYPAGE];
         var incrementPagination = 1;
         var totalPage = [];
+
+
         $scope.eventPromise    = Event.getAll();
 
         $scope.eventPromise.$promise.then(function (response) {
@@ -73,6 +76,12 @@ angular.module('dataqApp')
         console.log("newCtrl");
         $scope.login        = Login.verifySession();
 
+        $scope.userLogin    = Login.getCurrentUser();
+        
+        if ($scope.userLogin.type == "colaborador") {
+             console.log("user login without permission");
+             $location.url("/home");
+        };
         $rootScope.PAGE     = "new";
         $scope.errors       = {};
         $scope.eventFields  =
@@ -164,6 +173,12 @@ angular.module('dataqApp')
     .controller('SingleEventCtrl', function($rootScope, $scope, $location , Event, $routeParams, countryService, marketsService, Login){
         console.log('SingleEventCtrl')
         $scope.login           = Login.verifySession();
+        $scope.userLogin    = Login.getCurrentUser();
+        
+        if ($scope.userLogin.type == "colaborador") {
+             console.log("user login without permission");
+             $location.url("/home");
+        };
 
         $rootScope.PAGE = "single";
         $scope.event = new Event(

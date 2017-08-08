@@ -126,9 +126,10 @@ angular.module('dataqApp')
 						console.log("user no existe todavia..");
 					}else{
 						if (scope.live !== 'false'){
+							console.log("scope.live True");
 							//scope.record referencia hacia el objeto Event (factory) y su funcion Update (put)
 							scope.record.userObj[0].$update({id : scope.record.userObj[0]["_id"]}, function(updateRecord){
-								scope.record.userObj[0] = updateRecord;
+								scope.record.userObj[0] = updateRecord.data;
 							});
 						}
 					}

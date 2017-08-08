@@ -16,7 +16,7 @@ angular.module('dataqApp')
             },
             'update':   { 
                 method: 'PUT', 
-                isArray: true,
+                isArray: false,
                 headers: { 'token': dynamicHeaderVal }
             },
             'delete':   {    

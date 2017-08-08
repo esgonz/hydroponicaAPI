@@ -12,10 +12,10 @@ angular.module('dataqApp')
             window.location = "/login";
         }
 
-        $scope.currentUser = Login.getCurrentUser();
-                        if ($scope.currentUser != null) {
+        $scope.userLogin = Login.getCurrentUser();
+                        if ($scope.userLogin != null) {
                             console.log("current user Ok");
-                            console.log($scope.currentUser);
+                            console.log($scope.userLogin);
                         };
         /*$scope.mePromise = Login.me.getData({'token': $scope.token});
         $scope.mePromise.$promise.then(function (response) {
