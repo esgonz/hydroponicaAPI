@@ -59,10 +59,10 @@
                  Hola {{userLogin.name}}
                  <span class="caret"></span>
               </a>
-              <ul class="dropdown-menu" aria-labelledby="themes">
-                <li><a href="#" ng-click="logout()">Logout</a></li>
+              <!-- <ul class="dropdown-menu" aria-labelledby="themes">
+                <li><a href="#" ng-click="logout()">Cerrar sesi&oacute;n</a></li>
                 <li class="divider"></li>
-              </ul>
+              </ul> -->
             </li>
           </ul>
         </div>
@@ -95,8 +95,8 @@
               <img src="/img/png/logosqm.png" class="imgfooter">
               <p>Realizado por <a href="#"> Marketing SQM</a>.<br >contactar a <a href="mailto:esteban.gonzalez@sqm.com">esteban.gonzalez@sqm.com</a></p>
             </div>
-            <div class="col-lg-2 col-xs-12 col-sm-4 panel-footer">
-              <a href="#" ng-click="logout()" class="btn btn-danger btn-lg  btn-block">Logout <img src="/img/png/logout.png"></a>
+            <div class="col-lg-2 col-xs-12 col-sm-4 panel-footer" ng-controller="navMenuCtrl">
+              <a href="#" ng-click="logout()" class="btn btn-danger btn-lg btn-block">Cerrar sesi&oacute;n <img src="/img/png/logout.png"></a>
             </div>
           </div>
           <!-- <div class="col-lg-2">
