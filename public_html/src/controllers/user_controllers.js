@@ -129,8 +129,8 @@ Register a new user in the db using angular factory and connect via post express
 
     for (var i = 0; i< result.data.length; i++) {
 
-        if( $scope.userLogin.type == "superuser" ){
-            console.log("superuser add type : " +result.data[i].value);
+        if( $scope.userLogin.type == "superadmin" ){
+            console.log("superadmin add type : " +result.data[i].value);
             type.push(
             {
                 "name": result.data[i].name , 
@@ -139,7 +139,7 @@ Register a new user in the db using angular factory and connect via post express
         }  
 
         else if( $scope.userLogin.type == "admin" ){
-            if (result.data[i].value !="superuser"){
+            if (result.data[i].value !="superadmin"){
                 console.log("admin add type : " +result.data[i].value);
                 type.push(
                 {
@@ -149,7 +149,7 @@ Register a new user in the db using angular factory and connect via post express
             }
         }
         else if( $scope.userLogin.type == "colaborator" ){
-            if (result.data[i].value !="superuser" && 
+            if (result.data[i].value !="superadmin" && 
                 result.data[i].value !="admin" ){
                 console.log("colaborator add type : " +result.data[i].value);
                 type.push(
@@ -161,7 +161,7 @@ Register a new user in the db using angular factory and connect via post express
         }
 
         else if( $scope.userLogin.type == "editor" ){
-            if (result.data[i].value !="superuser" && 
+            if (result.data[i].value !="superadmin" && 
                 result.data[i].value !="admin" && 
                 result.data[i].value !="colaborator"){
                 console.log("editor add type : " +result.data[i].value);

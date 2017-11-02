@@ -1,72 +1,70 @@
-<div class="col-lg-12" ng-controller="ListEventCtrl">
-          <a name="top"></a>
-          <div class="page-header">
-            <h4>
-<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-            Lista Eventos</h4>
-            
-          </div>
-
-
+<div class="container-fluid">
+  <div class="row" ng-controller="ListUserCtrl">
+    <div class="col-lg-12" >
+      <div class="panel panel-primary">
+        <div class="col-lg-12 col-sm-12 panel-heading">
+            <div class="col-lg-6 col-sm-6">
+              <h3><strong>Tabla de Eventos</strong><br>
+              <small>Eventos de importancia dentro de los cuales participara la empresa</small></h3>
+            </div>
+            <div class="col-lg-6 col-sm-6">
+              <a ng-if="userLogin.type !='colaborador' " class="btn btn-default btn-lg btn-block" href="/events/new/">
+                <img src="/img/png/agregarnuevoevento.png">
+                Agregar nuevo evento
+                <img src="/img/png/engranes.png">
+              </a>
+            </div>
+        </div>
           <!-- well table -->
-          <div class="well bs-component">
-            <div class="row">
-              <div class="col-lg-12">
-              <a  ng-if="userLogin.type !='colaborador' " class="btn btn-primary pull-right" href="/events/new/">Agregar un nuevo Evento</a>
-                <table class="table table-responsive table-condensed table-bordered table-striped table-hover3">
-                  <thead>
-                    <tr>
-
-                      <th>Nombre</th>
-                      <th>Mes</th>
-                      <th>fecha Inicio</th>
-                      <th>fecha Termino</th>
-                      <th>Pais</th>
-                      <th>Mercado</th>
-                      <th>Disponible</th>
-                      <th>Editar</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="event in eventsToShow">
-          
-                      <td>{{event.name}}</td>
-                      <td>{{event.month}}</td>
-                      <td>{{event.initDate | date:'dd-MM-yyyy'}}</td>
-                      <td>{{event.endDate | date:'dd-MM-yyyy'}}</td>
-                      <td>{{event.country}}</td>
-                      <td>{{event.market}}</td>
-                      <td>
-                        <span ng-show="{{event.status}}" class="glyphicon glyphicon-ok-circle success-color" aria-hidden="true"></span>
-                        <span ng-show="{{!event.status}}" class="glyphicon glyphicon-remove-circle alert-color" aria-hidden="true"></span>                   
-
-                      </td>
-                      <td>
-                      <div class="btn-group">
-                        <a ng-if="userLogin.type !='colaborador' " class="btn btn-sm btn-primary" ng-click="show(event._id)">
-                          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        </a>
-
-                      </div>
-                      </td>
-                    </tr>
-
-                  </tbody>
-                </table> 
-              </div>
-            </div>
-          </div><!-- /well table -->
-          
-
-          <div class="page-footer">
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <ul class="pagination pagination-md">
-                  <li class="disabled"><a href="#" ng-click="pagination('prev')">«</a></li>
-                  <li ng-repeat="page in totalPage" ng-click="pagination($index)" ng-if="$index>0"><span>{{$index}}</span></li>
-                  <li><a href="#" ng-click="pagination('next')">»</a></li>
-                </ul>
-              </div>
-            </div>
+        <div class="bs-component col-lg-12 col-sm-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover ">
+              <thead>
+                <tr class="active">
+                  <th>Nombre</th>
+                  <th>Mes</th>
+                  <th>fecha Inicio</th>
+                  <th>fecha Termino</th>
+                  <th>Pais</th>
+                  <th>Mercado</th>
+                  <th>Disponible</th>
+                  <th>Editar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="event in eventsToShow">
+                  <td>{{event.name}}</td>
+                  <td>{{event.month}}</td>
+                  <td>{{event.initDate | date:'dd-MM-yyyy'}}</td>
+                  <td>{{event.endDate | date:'dd-MM-yyyy'}}</td>
+                  <td>{{event.country}}</td>
+                  <td>{{event.market}}</td>
+                  <td>
+                    <span ng-show="{{event.status}}" aria-hidden="true"><img src="/img/png/disponible.png"></span>
+                    <span ng-show="{{!event.status}}" aria-hidden="true"><img src="/img/png/nodisponible.png"></span>
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <a ng-if="userLogin.type !='colaborador' " ng-click="show(event._id)"><img src="/img/png/editar.png"></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table> 
           </div>
         </div>
+      </div><!-- /well table -->
+      <div class="page-footer">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="pagination pagination-sm">
+              <li class="disabled"><a href="#" ng-click="pagination('prev')">«</a></li>
+              <li ng-repeat="page in totalPage" ng-click="pagination($index)" ng-if="$index>0"><span>{{$index}}</span></li>
+              <li><a href="#" ng-click="pagination('next')">»</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

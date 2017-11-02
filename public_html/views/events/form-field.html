@@ -1,11 +1,12 @@
 <!-- form angular. hack -> $dirty si es que cambio alguno de sus input (en este caso 1) $invalid si hay un error segun el controlador-->
 <!-- {{field}} significa que es una referencia al scope field creado en el template padre (plantilla <form-field> en new.html)-->
 <div class="row form-group" ng-form="{{ field }}">
-	<div ng-if="record[field][1] == true">			
-		<label class="col-lg-2 control-label"> {{ eventsFieldsName[field] }} <span ng-if="required">*</span></label>
+	<div ng-if="record[field][1] == true">	
 		
 		<!--siwtch angular case:'required'-->
-		<div class="col-lg-10" ng-switch="required">
+		<div class="col-lg-12" ng-switch="required">
+
+		 {{ eventsFieldsName[field] }} <span ng-if="required">*</span>
 			
 			
 			<!--switch true -->
