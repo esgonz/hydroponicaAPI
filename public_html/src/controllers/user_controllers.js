@@ -8,7 +8,7 @@ angular.module('dataqApp')
     //verify login
     $scope.login        = Login.verifySession();
     $scope.userLogin    = Login.getCurrentUser();
-    if ($scope.userLogin.type !="superadmin" && $scope.userLogin.type !="admin") {
+    if ($scope.userLogin.type !="superuser" && $scope.userLogin.type !="admin") {
          console.log("user login without permission");
          $location.url("/home");
     };
@@ -98,7 +98,6 @@ Register a new user in the db using angular factory and connect via post express
     $scope.errors       = {};
     $scope.userFields   =
         {
-            userId:         ["text",        false],
             name:           ["text",        true],
             email:          ["email",       true],
             password:       ["password",    true],
@@ -108,7 +107,6 @@ Register a new user in the db using angular factory and connect via post express
             userObj:       [
             new User(
             {
-                userId:     "",
                 name:       "",
                 email:      "",
                 password:   "",
@@ -120,7 +118,7 @@ Register a new user in the db using angular factory and connect via post express
             ]
         };
     $scope.userLogin = Login.getCurrentUser();
-    if ($scope.userLogin.type !="superadmin" && $scope.userLogin.type !="admin") {
+    if ($scope.userLogin.type !="superuser" && $scope.userLogin.type !="admin") {
          console.log("user login without permission");
          $location.url("/home");
     };
@@ -269,7 +267,7 @@ Register a new user in the db using angular factory and connect via post express
         };
 
         $scope.userLogin = Login.getCurrentUser();
-        if ($scope.userLogin.type !="superadmin" && $scope.userLogin.type !="admin") {
+        if ($scope.userLogin.type !="superuser" && $scope.userLogin.type !="admin") {
             console.log("user login without permission");
             $location.url("/home");
         };

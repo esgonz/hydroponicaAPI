@@ -60,7 +60,7 @@ exports.addUser = function (req, res){
 		if( err ){
 			res.json({
 				type: false,
-				data: "error Occured: " +err
+				data: "error Occured: " + err
 			});
 		}else{
 			if( user ){
@@ -71,7 +71,7 @@ exports.addUser = function (req, res){
 			}else{
 				var passwordHashed = Sha1(req.body.password + SALT);
 				var userUuid = uuidv1();
-				var user = new User({
+				var user = 	new User({
 					userId: 		userUuid,
 					name: 			req.body.name,
 					email: 			req.body.email,
