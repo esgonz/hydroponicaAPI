@@ -1,106 +1,81 @@
-
 <div class="col-lg-8 col-lg-offset-2" ng-controller="newCtrl">
-          <div class="page-header">
-            <h2>Tabla Events</h2>
-            <a  class="btn btn-primary">Nuevo Event</a>
+  <div class="page-header">
+    <h2>Tabla Events</h2>
+    <a class="btn btn-primary">Nuevo Event</a>
+  </div>
+  <div class="well bs-component">
+    <form class="form-horizontal" name="nuevoEvent">
+      <fieldset>
+        <!-- NOMBRE -->
+        <div class="form-group">
+          <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
+          <div class="col-lg-10">
+            <input type="text" class="form-control" id="inputNombre" placeholder="Ejemplo: Nuevo Event Agricultores en Barcelona">
           </div>
-
-          <div class="well bs-component">
-              <form class="form-horizontal" name="nuevoEvent">
-                
-
-                <fieldset>
-                  
-                  <!-- NOMBRE -->
-                  <div class="form-group">
-                    <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
-                    <div class="col-lg-10">
-                      <input type="text" class="form-control" id="inputNombre" placeholder="Ejemplo: Nuevo Event Agricultores en Barcelona">
-                    </div>
-                  </div>
-                  
-                  <!-- CLAVE -->
-                  <div class="form-group">
-                    <label for="inputPassword" class="col-lg-2 control-label">Clave</label>
-                    <div class="col-lg-4">
-                      <input type="password" class="form-control" id="inputPassword" placeholder="****">
-                      
-                    </div>
-                  </div>
-                  
-                  <!--FECHAS -->
-                  <div class="form-group">
-                    <label for="inputFechaInicio" class="col-lg-2 control-label">Fecha de Inicio</label>
-                    <div class="col-lg-4">
-                      <input type="date" class="form-control" name="inputFechaInicio">
-                    </div>
-
-     
-        
-                    <label for="inputFechaTermino" class="col-lg-2 control-label">Fecha de Termino</label>
-                    <div class="col-lg-4">
-                      <input type="date" class="form-control" name="inputFechaTermino">
-                    </div>
-
-
-
-                  </div>
-                  
-
-                  <!-- MES /PAIS -->
-                  <div class="form-group">
-
-                    <label for="selectPais" class="col-lg-2 control-label">Pais</label>
-                    <div class="col-lg-4">
-                      <select class="form-control" name ="selectPais" id="select">
-                        <option>Peru</option>
-                        <option>Mexico</option>
-                        <option>Chile</option>
-                        <option>Brasil</option>
-                        <option>España</option>
-                        <option>Belgica</option>
-                        <option>China</option>
-                        <option>Tailand</option>
-                      </select>
-                      <br>
-                    </div>
-                  </div>
-
-                  
-
-                  <!--MERCADO -->
-                  <div class="form-group">
-                    <label for="selectMercado" class="col-lg-2 control-label">Mercado</label>
-                    <div class="col-lg-4">
-                      <select class="form-control" name ="selectMercado" id="select">
-                        <option>Peru</option>
-                        <option>Mexico</option>
-                        <option>Chile</option>
-                        <option>Brasil</option>
-                        <option>Europa</option>
-                      </select>
-                      <br>
-                    </div>
-          
-                    <div class="col-lg-4 col-lg-offset-2">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" name="checkbockDisponible"> Disponible
-                        </label>
-                        </div>
-                    </div>
-
-                  </div>
-      
-                  <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-2">
-                      <button type="reset" class="btn btn-default">Cancelar</button>
-                      <button class="btn btn-primary" ng-click="save()" type="">Agregar</button>
-                    
-                    </div>
-                  </div>
-
-                </fieldset>
-              </form>
+        </div>
+        <!-- CLAVE -->
+        <div class="form-group">
+          <label for="inputPassword" class="col-lg-2 control-label">Clave</label>
+          <div class="col-lg-4">
+            <input type="password" class="form-control" id="inputPassword" placeholder="****">
           </div>
+        </div>
+        <!--FECHAS -->
+        <div class="form-group">
+          <label for="inputFechaInicio" class="col-lg-2 control-label">Fecha de Inicio</label>
+          <div class="col-lg-4">
+            <input type="date" class="form-control" name="inputFechaInicio">
+          </div>
+          <label for="inputFechaTermino" class="col-lg-2 control-label">Fecha de Termino</label>
+          <div class="col-lg-4">
+            <input type="date" class="form-control" name="inputFechaTermino">
+          </div>
+        </div>
+        <!-- MES /PAIS -->
+        <div class="form-group">
+          <label for="selectPais" class="col-lg-2 control-label">Pais</label>
+          <div class="col-lg-4">
+            <select class="form-control" name ="selectPais" id="select">
+              <option>Peru</option>
+              <option>Mexico</option>
+              <option>Chile</option>
+              <option>Brasil</option>
+              <option>España</option>
+              <option>Belgica</option>
+              <option>China</option>
+              <option>Tailand</option>
+            </select>
+            <br>
+          </div>
+        </div>
+        <!--MERCADO -->
+        <div class="form-group">
+          <label for="selectMercado" class="col-lg-2 control-label">Mercado</label>
+          <div class="col-lg-4">
+            <select class="form-control" name ="selectMercado" id="select">
+              <option>Peru</option>
+              <option>Mexico</option>
+              <option>Chile</option>
+              <option>Brasil</option>
+              <option>Europa</option>
+            </select>
+            <br>
+          </div>
+          <div class="col-lg-4 col-lg-offset-2">
+            <div class="checkbox">
+              <label>
+                 <input type="checkbox" name="checkbockDisponible"> Disponible
+               </label>
+             </div>
+           </div>
+         </div>
+         <div class="form-group">
+          <div class="col-lg-10 col-lg-offset-2">
+            <button type="reset" class="btn btn-default">Cancelar</button>
+            <button class="btn btn-primary" ng-click="save()" type="">Agregar</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
 </div>
