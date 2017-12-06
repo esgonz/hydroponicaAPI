@@ -4,8 +4,8 @@
             <a name="top"></a>
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3><strong>Bienvenido</strong><br>
-                    <small>Ingresa tu usuario y clave para iniciar sesi&oacute;n</small></h3>
+                    <h3><strong>Welcome</strong><br>
+                    <small>Enter your user and password to login</small></h3>
                 </div>
                 <div class="panel-body">
                     <div ng-if="error != '' " class="alert alert-dismissible alert-danger">
@@ -14,17 +14,17 @@
                     <form class="form-horizontal" role="form" ng-submit="signin()">
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <label for="email" class="control-label">Email</label>
+                                <label for="email" class="control-label">User</label>
                                 <input type="email" class="form-control" id="email" placeholder="Email" ng-model="email">
                             </div>
                             <div class="col-sm-12">
-                                <label for="password" class="control-label">Contrase&ntilde;a</label>
+                                <label for="password" class="control-label">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Contrase&ntilde;a" ng-model="password">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default btn-lg btn-block login">Iniciar sesi&oacute;n <img src="/img/png/sign-in.png"></button>
+                                <button type="submit" class="btn btn-default btn-lg btn-block login">Log in <img src="/img/png/sign-in.png"></button>
                             </div>
                         </div>
                     </form>
