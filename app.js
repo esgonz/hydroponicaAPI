@@ -6,7 +6,7 @@ var express 		= require( "express" ),
 	jwt 			= require("jsonwebtoken"),
 	morgan 			= require("morgan"),
 	sha1 			= require("sha1"),
-	dbName 			= "dataq0100";
+	dbName 			= "hydroponica001";
 
 
 
@@ -40,14 +40,18 @@ var setting 			= require("./models/setting.js"),
 	settingCtrl 		= require("./controllers/settings");
 
 //import models and controllers Events
-var	event 			= require( "./models/event"),
-	eventCtrl 		= require( "./controllers/events" );
+/*var	event 			= require( "./models/event"),
+	eventCtrl 		= require( "./controllers/events" );*/
 
 
 
 //import models and controllers Users
 var	user 			= require( "./models/user"),
 	userCtrl 		= require( "./controllers/users" );
+
+var programme 		= require("./models/programme"),
+	programmeCtrl 	= require ("./controllers/programmes");
+
 
 
 //URis API Settings
@@ -77,23 +81,23 @@ app.use('/api', auth);
 var users = express.Router();
 	//get all users
 	users.route('/users')
-		.get(
-			userCtrl.headerAuth, 
-			userCtrl.findByMarket
-			)
-		
-		.post(
-			userCtrl.headerAuth, 
-			userCtrl.addUser
-			);
-
 		/*.get(
+			userCtrl.headerAuth, 
 			userCtrl.findByMarket
 			)
 		
 		.post(
+			userCtrl.headerAuth, 
 			userCtrl.addUser
 			);*/
+
+		.get(
+			userCtrl.findAllUsers
+			)
+		
+		.post(
+			userCtrl.addUser
+			);
 	
 
 	
@@ -114,7 +118,25 @@ var users = express.Router();
 app.use('/api', users);
 
 
-//URis API events 
+//URis API programme
+
+var programmes =  express.Router();
+	//get all programmes
+	programmes.route('/programmes')
+		.get( 
+				programmeCtrl.findAllProgrammes
+			)
+		.post(
+				programmeCtrl.addProgramme
+			)
+
+app.use('/api', programmes);
+
+
+
+//URis API events
+/*
+
 var events = express.Router();
 	//get all events
 	events.route('/events')
@@ -150,7 +172,11 @@ var events = express.Router();
 
 app.use('/api', events);
 
+*/
+
 //URis API movils 
+/*
+
 var eventsMovil = express.Router();
 	//get all events
 	eventsMovil.route('/events')
@@ -166,26 +192,31 @@ var eventsMovil = express.Router();
 
 
 app.use('/api/movil', eventsMovil);
+*/
 
 
 
 //basic route
 /*
-var router 	= express.Router();
+	var router 	= express.Router();
 
-router.get( '/', function( req, res ){
-	res.send("Hello World!");
-} );*/
+	router.get( '/', function( req, res ){
+		res.send("Hello World!");
+	} );
+*/
 
 //app.use(router);
+
+
+
 app
 	.use(express.static('./public_html'))
 	.get('*', function (req, res){
 		res.sendfile('public_html/main.html');
-	})
+})
 // start server
 
-		app.listen( 3000, function(){
-			console.log( "Node server running on http://localhost:3000" );
-		} );
+app.listen( 3000, function(){
+	console.log( "Node server running on http://localhost:3000" );
+});
 

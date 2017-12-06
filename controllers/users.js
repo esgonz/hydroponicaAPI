@@ -4,7 +4,8 @@ var mongoose 	= require( "mongoose" ),
 	User 		= mongoose.model( "User" ),
 	Sha1 		= require("sha1"),	
 	uuidv1 		= require("uuid/v1"), 
-	SALT 		= "^rM%Mj6okx?yGT|gJg9c.KKJMs/BGy^njuILKl~?[8RQ*r:bo$sNDMgpx*tZD|3";
+	SALT 		= "!Xo2O6Ig6hwD8pJwH0R4cDe3ZecLH$tgtu9()xxJ9JRtXNg6Yv5)7SD2L6YR!^T1";
+
 /*
 Module to auth an intent to login
  */
@@ -21,7 +22,6 @@ exports.auth = function (req, res){
 			});
 		}else{
 			if(user){
-
 				var userReturn = new User({
 					userId: 	user.id,
 					name: 		user.name,
@@ -48,10 +48,6 @@ exports.auth = function (req, res){
 	});
 };
 
-
-
-
-
 /*
 Register new users
  */
@@ -70,18 +66,18 @@ exports.addUser = function (req, res){
 				});
 			}else{
 				var passwordHashed = Sha1(req.body.password + SALT);
-				var userUuid = uuidv1();
+				//var userUuid = uuidv1();
 				var user = 	new User({
-					userId: 		userUuid,
-					name: 			req.body.name,
-					email: 			req.body.email,
-					password: 		passwordHashed.toUpperCase(),
-					market: 		req.body.market,
-					type: 			req.body.type,
-					status: 		req.body.status
+
+						name: 			req.body.name,
+						email: 			req.body.email,
+						password: 		passwordHashed.toUpperCase(),
+						market: 		req.body.market,
+						type: 			req.body.type,
+						status: 		req.body.status
+
 				});
 				var userToken = new User({
-					userId: 		userUuid,
 					name: 			req.body.name,
 					email: 			req.body.email,
 					market: 		req.body.market,
@@ -102,7 +98,6 @@ exports.addUser = function (req, res){
 						});	
 						//res.status(200).jsonp(user);
 					}
-
 				});
 			}
 		}
@@ -121,7 +116,6 @@ exports.findAllUsers = function (req, res){
 		res.status(200).jsonp(users);
 	});
 };
-
 
 //GET - Return all Userss in the DB with the id 
 exports.findByMarket = function (req, res){
@@ -171,8 +165,6 @@ exports.findAllUsersTablet = function (req, res){
 	});
 };
 
-
-
 //GET - Return all Users in the DB with the id 
 exports.findById = function (req, res){
 	User.findById( req.params.id, function(err, user){
@@ -184,7 +176,6 @@ exports.findById = function (req, res){
 		res.status(200).jsonp(user);
 	});
 };
-
 
 //PUT update one user
 exports.updateUser = function( req, res) {
@@ -243,7 +234,6 @@ exports.updateUser = function( req, res) {
 				};
 
 				var userToken = new User({
-					userId: 		user.id ,
 					name: 			user.name ,
 					email: 			user.email,
 					market: 		user.market,
@@ -271,7 +261,7 @@ exports.updateUser = function( req, res) {
 			}else{
 				res.json({
 					type: false,
-					data: "User doesnt exits"
+					data: "User doesn't exits"
 				});
 			}
 		}
@@ -290,7 +280,6 @@ exports.deleteUser = function ( req, res ){
 };
 
 /*
-
 En esta función, se interceptan los encabezados de la petición y 
 se extrae el encabezado authorization. Si en este encabezado 
 existe un token portador, dicho token es asignado a req.token 
@@ -316,10 +305,7 @@ exports.ensureAuthorized = function(req,res, next){
 			} else{
 				res.send(403);
 			}*/
-
 }
-
-
 
 //PUT update one event
 exports.postAuth = function( req, res, next) {
@@ -350,7 +336,6 @@ exports.postAuth = function( req, res, next) {
 	  
 	});
 }
-
 
 exports.getUser = function (req, res, next){
 	User.findOne({ token: req.headers.token }, function (err, user) {
